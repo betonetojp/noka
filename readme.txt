@@ -24,7 +24,7 @@ GhostSpeakerと棒読みちゃんを組み合わせて読み上げさせるの�
 https://github.com/apxxxxxxe/GhostSpeaker
 https://chi.usamimi.info/Program/Application/BouyomiChan/
 
-「伺か」用ゴーストnostalkのNostrイベント通知(Nostr/0.1,Nostr/0.3)に対応しアバター画像を送信できます。
+「伺か」用ゴーストnostalkのNostrイベント通知(Nostr/0.3)に対応しアバター画像を送信できます。
 https://github.com/nikolat/nostalk
 
 
