@@ -314,7 +314,7 @@ namespace noka
                                         { "Reference1", "reaction" }, // kind
                                         { "Reference2", content }, // content
                                         { "Reference3", user?.Name ?? "???" }, // name
-                                        { "Reference4", user?.DisplayName ?? "???" }, // display_name
+                                        { "Reference4", user?.DisplayName ?? "" }, // display_name
                                         { "Reference5", user?.Picture ?? "https://betoneto.win/media/nokakoi_gray.png" }, // picture
                                         { "Script", $"{speaker}リアクション {userName}\\n{content}\\e" }
                                     };
@@ -370,7 +370,7 @@ namespace noka
                                     { "Reference1", "note" },
                                     { "Reference2", content }, // content
                                     { "Reference3", user?.Name ?? "???" }, // name
-                                    { "Reference4", user?.DisplayName ?? "???" }, // display_name
+                                    { "Reference4", user?.DisplayName ?? "" }, // display_name
                                     { "Reference5", user?.Picture ?? "https://betoneto.win/media/nokakoi_gray.png" }, // picture
                                     { "Script", $"{speaker}{userName}\\n{msg}\\e" }
                                 };
@@ -378,9 +378,6 @@ namespace noka
                                 string r = _ds.GetSSTPResponse(_ghostName, sstpmsg);
                                 //Debug.WriteLine(r);
                             }
-
-                            // エスケープ解除（↑SSPにはエスケープされたまま送る）
-                            //content = Regex.Unescape(content); // NNostr 0.0.49で余分な'\'が付かなくなった！
 
                             // キーワード通知
                             var settings = Notifier.Settings;
