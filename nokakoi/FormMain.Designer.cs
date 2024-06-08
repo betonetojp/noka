@@ -42,6 +42,7 @@
             // buttonStart
             // 
             buttonStart.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonStart.Image = Properties.Resources.icons8_start_16;
             buttonStart.Location = new Point(131, 12);
             buttonStart.Name = "buttonStart";
             buttonStart.Size = new Size(23, 23);
@@ -70,6 +71,7 @@
             // 
             buttonStop.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             buttonStop.Enabled = false;
+            buttonStop.Image = Properties.Resources.icons8_stop_16;
             buttonStop.Location = new Point(160, 12);
             buttonStop.Name = "buttonStop";
             buttonStop.Size = new Size(23, 23);
@@ -80,6 +82,7 @@
             // buttonSetting
             // 
             buttonSetting.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonSetting.Image = Properties.Resources.icons8_setting_16;
             buttonSetting.Location = new Point(189, 12);
             buttonSetting.Name = "buttonSetting";
             buttonSetting.Size = new Size(23, 23);
@@ -89,6 +92,7 @@
             // 
             // buttonRelayList
             // 
+            buttonRelayList.Image = Properties.Resources.icons8_list_16;
             buttonRelayList.Location = new Point(12, 12);
             buttonRelayList.Name = "buttonRelayList";
             buttonRelayList.Size = new Size(23, 23);

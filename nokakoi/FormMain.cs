@@ -252,6 +252,7 @@ namespace noka
         /// <param name="args"></param>
         private void OnClientOnEventsReceived(object? sender, (string subscriptionId, NostrEvent[] events) args)
         {
+            Debug.WriteLine("_followeesHexs.Count " + _followeesHexs.Count);
             // タイムライン購読
             if (args.subscriptionId == _subscriptionId)
             {
@@ -428,11 +429,6 @@ namespace noka
             {
                 foreach (var nostrEvent in args.events)
                 {
-                    if (RemoveCompletedEventIds(nostrEvent.Id))
-                    {
-                        continue;
-                    }
-
                     // フォローリスト
                     if (3 == nostrEvent.Kind)
                     {
