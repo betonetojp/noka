@@ -318,7 +318,7 @@ namespace noka
                                         { "Reference5", user?.Picture ?? "https://betoneto.win/media/nokakoi_gray.png" }, // picture
                                         { "Script", $"{speaker}ƒŠƒAƒNƒVƒ‡ƒ“ {userName}\\n{content}\\e" }
                                     };
-                                    string sstpmsg = _SSTPMethod + "\r\n" + String.Join("\r\n", SSTPHeader.Select(kvp => kvp.Key + ": " + kvp.Value)) + "\r\n\r\n";
+                                    string sstpmsg = _SSTPMethod + "\r\n" + String.Join("\r\n", SSTPHeader.Select(kvp => kvp.Key + ": " + kvp.Value.Replace("\n", "\\n"))) + "\r\n\r\n";
                                     string r = _ds.GetSSTPResponse(_ghostName, sstpmsg);
                                     //Debug.WriteLine(r);
                                 }
@@ -374,7 +374,7 @@ namespace noka
                                     { "Reference5", user?.Picture ?? "https://betoneto.win/media/nokakoi_gray.png" }, // picture
                                     { "Script", $"{speaker}{userName}\\n{msg}\\e" }
                                 };
-                                string sstpmsg = _SSTPMethod + "\r\n" + String.Join("\r\n", SSTPHeader.Select(kvp => kvp.Key + ": " + kvp.Value)) + "\r\n\r\n";
+                                string sstpmsg = _SSTPMethod + "\r\n" + String.Join("\r\n", SSTPHeader.Select(kvp => kvp.Key + ": " + kvp.Value.Replace("\n", "\\n"))) + "\r\n\r\n";
                                 string r = _ds.GetSSTPResponse(_ghostName, sstpmsg);
                                 //Debug.WriteLine(r);
                             }
