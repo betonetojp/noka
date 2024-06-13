@@ -1,4 +1,3 @@
-using noka.Properties;
 using System.Diagnostics;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -28,7 +27,7 @@ namespace noka
         private string _fileName = "https://njump.me/";
         private bool _muteMostr = false;
 
-        private readonly string _jsonPath = "keywords.json";
+        private readonly string _keywordsJsonPath = Path.Combine(Application.StartupPath, "keywords.json");
         private readonly JsonSerializerOptions _options = new()
         {
             Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
@@ -55,7 +54,7 @@ namespace noka
             try
             {
                 var jsonContent = JsonSerializer.Serialize(Settings, _options);
-                File.WriteAllText(_jsonPath, jsonContent);
+                File.WriteAllText(_keywordsJsonPath, jsonContent);
             }
             catch (Exception ex)
             {
@@ -65,11 +64,11 @@ namespace noka
 
         public void LoadSettings()
         {
-            if (File.Exists(_jsonPath))
+            if (File.Exists(_keywordsJsonPath))
             {
                 try
                 {
-                    var jsonContent = File.ReadAllText(_jsonPath);
+                    var jsonContent = File.ReadAllText(_keywordsJsonPath);
                     var settings = JsonSerializer.Deserialize<NotifierSettings>(jsonContent, _options);
                     if (settings != null)
                     {

@@ -9,6 +9,8 @@ namespace noka
     public partial class FormMain : Form
     {
         #region フィールド
+        private readonly string _configPath = Path.Combine(Application.StartupPath, "noka.config");
+
         private readonly TimeSpan _timeSpan = new(0, 0, 0, 0);
 
         private readonly FormSetting _formSetting = new();
@@ -94,7 +96,7 @@ namespace noka
                 buttonSetting.Image = new Bitmap(Properties.Resources.icons8_setting_32, size, size);
             }
 
-            Setting.Load("noka.config");
+            Setting.Load(_configPath);
             Users = Tools.LoadUsers();
 
             Location = Setting.Location;
@@ -122,7 +124,7 @@ namespace noka
             {
                 Debug.WriteLine(e.Message);
             }
-            
+
             _formManiacs.MainForm = this;
         }
         #endregion
@@ -282,12 +284,12 @@ namespace noka
 
                         // フォロイーチェック
                         string headMark = "-";
-                        string speaker = "\\u\\p[1]\\s[10]";
+                        string speaker = "\\1";
                         if (_followeesHexs.Contains(nostrEvent.PublicKey))
                         {
                             headMark = "*";
-                            // さくら側がしゃべる
-                            speaker = "\\h\\p[0]\\s[0]";
+                            // 本体側がしゃべる
+                            speaker = "\\0";
                         }
 
                         // リアクション
@@ -314,8 +316,8 @@ namespace noka
                                         { "Reference1", "reaction" }, // kind
                                         { "Reference2", content }, // content
                                         { "Reference3", user?.Name ?? "???" }, // name
-                                        { "Reference4", user?.DisplayName ?? "" }, // display_name
-                                        { "Reference5", user?.Picture ?? "https://betoneto.win/media/nokakoi_gray.png" }, // picture
+                                        { "Reference4", user?.DisplayName ?? string.Empty }, // display_name
+                                        { "Reference5", user?.Picture ?? Setting.UnkownPicture }, // picture
                                         { "Script", $"{speaker}リアクション {userName}\\n{content}\\e" }
                                     };
                                     string sstpmsg = _SSTPMethod + "\r\n" + String.Join("\r\n", SSTPHeader.Select(kvp => kvp.Key + ": " + kvp.Value.Replace("\n", "\\n"))) + "\r\n\r\n";
@@ -363,15 +365,15 @@ namespace noka
                                 // 本文カット
                                 if (msg.Length > _cutLength)
                                 {
-                                    msg = $"{msg[.._cutLength]}...";//\\u\\p[1]\\s[10]長いよっ！";
+                                    msg = $"{msg[.._cutLength]}...";
                                 }
                                 Dictionary<string, string> SSTPHeader = new(_baseSSTPHeader)
                                 {
                                     { "Reference1", "note" },
                                     { "Reference2", content }, // content
                                     { "Reference3", user?.Name ?? "???" }, // name
-                                    { "Reference4", user?.DisplayName ?? "" }, // display_name
-                                    { "Reference5", user?.Picture ?? "https://betoneto.win/media/nokakoi_gray.png" }, // picture
+                                    { "Reference4", user?.DisplayName ?? string.Empty }, // display_name
+                                    { "Reference5", user?.Picture ?? Setting.UnkownPicture }, // picture
                                     { "Script", $"{speaker}{userName}\\n{msg}\\e" }
                                 };
                                 string sstpmsg = _SSTPMethod + "\r\n" + String.Join("\r\n", SSTPHeader.Select(kvp => kvp.Key + ": " + kvp.Value.Replace("\n", "\\n"))) + "\r\n\r\n";
@@ -439,14 +441,13 @@ namespace noka
                                 _followeesHexs.Add(tag.Data[0]);
                             }
                         }
-                        // プロフィールを購読する
-                        //SubscribeProfiles([.. _followeesHexs]);
                     }
                 }
             }
             // プロフィール購読
             else if (args.subscriptionId == _getProfilesSubscriptionId)
             {
+                //// ※nostrEventが返ってこない特定ユーザーがいる。ライブラリの問題か。
                 foreach (var nostrEvent in args.events)
                 {
                     if (RemoveCompletedEventIds(nostrEvent.Id))
@@ -457,11 +458,6 @@ namespace noka
                     // プロフィール
                     if (0 == nostrEvent.Kind && null != nostrEvent.Content && null != nostrEvent.PublicKey)
                     {
-                        //// ※nostrEvent.Contentがnullになってしまう特定ユーザーがいる。ライブラリの問題か。
-
-                        // エスケープされているので解除
-                        //var contentJson = Regex.Unescape(nostrEvent.Content); // NNostr 0.0.49で余分な'\'が付かなくなった！
-
                         var newUserData = Tools.JsonToUser(nostrEvent.Content, nostrEvent.CreatedAt, Notifier.Settings.MuteMostr);
                         if (null != newUserData)
                         {
@@ -601,7 +597,7 @@ namespace noka
             Setting.ShowOnlyFollowees = _showOnlyFollowees;
             Setting.Npub = _npub;
 
-            Setting.Save("noka.config");
+            Setting.Save(_configPath);
         }
         #endregion
 
@@ -801,7 +797,7 @@ namespace noka
                 Setting.Location = Location;
                 Setting.Size = Size;
             }
-            Setting.Save("noka.config");
+            Setting.Save(_configPath);
             Tools.SaveUsers(Users);
             Notifier.SaveSettings(); // 必要ないが更新日時をそろえるため
 

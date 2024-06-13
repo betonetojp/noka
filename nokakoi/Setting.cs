@@ -21,6 +21,7 @@ namespace noka
             public bool DisplayTime { get; set; } = true;
             public bool ShowOnlyFollowees { get; set; } = false;
             public string Npub { get; set; } = string.Empty;
+            public string UnkownPicture { get; set; } = string.Empty;
         }
         #endregion
 
@@ -122,6 +123,17 @@ namespace noka
             set
             {
                 _data.Npub = value;
+            }
+        }
+        public static string UnkownPicture
+        {
+            get
+            {
+                return _data.UnkownPicture;
+            }
+            set
+            {
+                _data.UnkownPicture = value;
             }
         }
         #endregion
