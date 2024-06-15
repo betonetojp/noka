@@ -30,6 +30,12 @@ https://github.com/nikolat/nostalk
 
 ◆ 更新履歴
 
+2024/06/15 ver. 0.1.2
+プロフィールのtagsに絵文字があるとプロフィールを取得できなっかった問題を修正しました。
+SSTP Nostr通知イベント Nostr/0.4に対応しました。
+※それに伴ない、picture未取得時に代替pictureを送っていたのを廃止しました。
+キーワード通知（Open file notification）送信時に利用リレー情報を含めないように変更しました。
+
 2024/06/13 ver. 0.1.1
 リレー表示がはみ出さないように修正しました。
 設定ファイルのパスを絶対パスに修正ました。
@@ -38,10 +44,11 @@ https://github.com/nikolat/nostalk
 初公開
 
 
-◆ 利用NuGetパッケージ
+◆ Nostrクライアントライブラリ
 
-NNostr.Client
-https://raw.githubusercontent.com/Kukks/NNostr/master/LICENSE
+NNostr
+https://github.com/Kukks/NNostr
+内のNNostr.Client Ver0.0.49を一部変更して利用しています。
 
 
 ◆ DirectSSTP送信ライブラリ
