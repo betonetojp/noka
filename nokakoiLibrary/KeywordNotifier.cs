@@ -27,7 +27,7 @@ namespace noka
         private string _fileName = "https://njump.me/";
         private bool _muteMostr = false;
 
-        private readonly string _keywordsJsonPath = Path.Combine(Application.StartupPath, "keywords.json");
+        private readonly string _keywordsJsonPath = Path.Combine(Tools.GetAppPath(), "keywords.json");
         private readonly JsonSerializerOptions _options = new()
         {
             Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),

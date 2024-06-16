@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Drawing;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
@@ -8,8 +9,12 @@ namespace noka
     public class Setting
     {
         private static Data _data = new();
+        private static ConsoleData _consoleData = new();
 
-        #region データクラス
+        #region 設定データクラス
+        /// <summary>
+        /// 設定データクラス
+        /// </summary>
         public class Data
         {
             public Point Location { get; set; }
@@ -22,6 +27,20 @@ namespace noka
             public bool ShowOnlyFollowees { get; set; } = false;
             public string Npub { get; set; } = string.Empty;
             public string UnkownPicture { get; set; } = string.Empty;
+        }
+        #endregion
+
+        #region コンソール設定データクラス
+        /// <summary>
+        /// コンソール設定データクラス
+        /// </summary>
+        public class ConsoleData
+        {
+            public int CutLength { get; set; } = 40;
+            public int CutNameLength { get; set; } = 8;
+            public bool DisplayTime { get; set; } = true;
+            public bool ShowOnlyFollowees { get; set; } = false;
+            public string Npub { get; set; } = string.Empty;
         }
         #endregion
 
@@ -138,6 +157,64 @@ namespace noka
         }
         #endregion
 
+        #region コンソールプロパティ
+        public static int ConloleCutLength
+        {
+            get
+            {
+                return _consoleData.CutLength;
+            }
+            set
+            {
+                _consoleData.CutLength = value;
+            }
+        }
+        public static int ConloleCutNameLength
+        {
+            get
+            {
+                return _consoleData.CutNameLength;
+            }
+            set
+            {
+                _consoleData.CutNameLength = value;
+            }
+        }
+        public static bool ConloleDisplayTime
+        {
+            get
+            {
+                return _consoleData.DisplayTime;
+            }
+            set
+            {
+                _consoleData.DisplayTime = value;
+            }
+        }
+        public static bool ConloleShowOnlyFollowees
+        {
+            get
+            {
+                return _consoleData.ShowOnlyFollowees;
+            }
+            set
+            {
+                _consoleData.ShowOnlyFollowees = value;
+            }
+        }
+        public static string ConloleNpub
+        {
+            get
+            {
+                return _consoleData.Npub;
+            }
+            set
+            {
+                _consoleData.Npub = value;
+            }
+        }
+        #endregion
+
         #region 設定ファイル操作
         /// <summary>
         /// 設定ファイル読み込み
@@ -174,6 +251,51 @@ namespace noka
                 var serializer = new XmlSerializer(typeof(Data));
                 using var streamWriter = new StreamWriter(path, false, Encoding.UTF8);
                 serializer.Serialize(streamWriter, _data);
+                streamWriter.Flush();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// コンソール設定ファイル読み込み
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static bool LoadConsoleData(string path)
+        {
+            try
+            {
+                var serializer = new XmlSerializer(typeof(ConsoleData));
+                var xmlSettings = new XmlReaderSettings();
+                using var streamReader = new StreamReader(path, Encoding.UTF8);
+                using var xmlReader = XmlReader.Create(streamReader, xmlSettings);
+                _consoleData = serializer.Deserialize(xmlReader) as ConsoleData ?? _consoleData;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// コンソール設定ファイル書き込み
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static bool SaveConsoleData(string path)
+        {
+            try
+            {
+                var serializer = new XmlSerializer(typeof(ConsoleData));
+                using var streamWriter = new StreamWriter(path, false, Encoding.UTF8);
+                serializer.Serialize(streamWriter, _consoleData);
                 streamWriter.Flush();
                 return true;
             }

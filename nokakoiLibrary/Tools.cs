@@ -39,9 +39,18 @@ namespace noka
 
     public static class Tools
     {
-        private static readonly string _usersJsonPath = Path.Combine(Application.StartupPath, "users.json");
-        private static readonly string _relaysJsonPath = Path.Combine(Application.StartupPath, "relays.json");
+        private static readonly string _usersJsonPath = Path.Combine(GetAppPath(), "users.json");
+        private static readonly string _relaysJsonPath = Path.Combine(GetAppPath(), "relays.json");
 
+        public static string GetAppPath()
+        {
+            string appPath = string.Empty;
+            if (null != System.Reflection.Assembly.GetExecutingAssembly().Location)
+            {
+                appPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) ?? string.Empty;
+            }
+            return appPath;
+        }
         /// <summary>
         /// JSONからユーザーを作成
         /// </summary>
@@ -147,7 +156,7 @@ namespace noka
         /// ユーザー辞書をファイルに保存する
         /// </summary>
         /// <param name="users">ユーザー辞書</param>
-        internal static void SaveUsers(Dictionary<string, User?> users)
+        public static void SaveUsers(Dictionary<string, User?> users)
         {
             // users.jsonに保存
             try
@@ -165,7 +174,7 @@ namespace noka
         /// ファイルからユーザー辞書を読み込む
         /// </summary>
         /// <returns>ユーザー辞書</returns>
-        internal static Dictionary<string, User?> LoadUsers()
+        public static Dictionary<string, User?> LoadUsers()
         {
             // users.jsonを読み込み
             if (!File.Exists(_usersJsonPath))
@@ -189,7 +198,7 @@ namespace noka
             }
         }
 
-        internal static void SaveRelays(List<Relay> relays)
+        public static void SaveRelays(List<Relay> relays)
         {
             // relays.jsonに保存
             try
@@ -203,7 +212,7 @@ namespace noka
             }
         }
 
-        internal static List<Relay> LoadRelays()
+        public static List<Relay> LoadRelays()
         {
             List<Relay> defaultRelays = [
                 new Relay { Enabled = true, Url = "wss://yabu.me/" },

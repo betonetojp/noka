@@ -2,34 +2,19 @@ using NNostr.Client;
 using NNostr.Client.Protocols;
 using SSTPLib;
 using System.Diagnostics;
-using System.Net.WebSockets;
 
 namespace noka
 {
     public partial class FormMain : Form
     {
         #region フィールド
-        private readonly string _configPath = Path.Combine(Application.StartupPath, "noka.config");
+        private readonly NostrAccess _nostrAccess = new();
 
-        private readonly TimeSpan _timeSpan = new(0, 0, 0, 0);
+        private readonly string _configPath = Path.Combine(Application.StartupPath, "noka.config");
 
         private readonly FormSetting _formSetting = new();
         private FormManiacs _formManiacs = new();
         private FormRelayList _formRelayList = new();
-
-        private CompositeNostrClient? _client;
-        /// <summary>
-        /// タイムライン購読ID
-        /// </summary>
-        private readonly string _subscriptionId = Guid.NewGuid().ToString("N");
-        /// <summary>
-        /// フォロイー購読ID
-        /// </summary>
-        private readonly string _getFolloweesSubscriptionId = Guid.NewGuid().ToString("N");
-        /// <summary>
-        /// プロフィール購読ID
-        /// </summary>
-        private readonly string _getProfilesSubscriptionId = Guid.NewGuid().ToString("N");
 
         private string _npub = string.Empty;
         private string _npubHex = string.Empty;
@@ -68,7 +53,7 @@ namespace noka
         private string _ghostName = string.Empty;
         // 重複イベントIDを保存するリスト
         private readonly LinkedList<string> _displayedEventIds = new();
-        Uri[] _relays = [];
+
         #endregion
 
         #region コンストラクタ
@@ -135,7 +120,35 @@ namespace noka
         {
             try
             {
-                int connectCount = await ConnectAsync();
+                int connectCount;
+                if (null != _nostrAccess.Clients)
+                {
+                    connectCount = await _nostrAccess.ConnectAsync();
+                }
+                else
+                {
+                    connectCount = await _nostrAccess.ConnectAsync();
+                    switch (connectCount)
+                    {
+                        case 0:
+                            labelRelays.Text = "0 relays";
+                            toolTipRelays.SetToolTip(labelRelays, string.Empty);
+                            break;
+                        case 1:
+                            labelRelays.Text = _nostrAccess.Relays[0].ToString();
+                            toolTipRelays.SetToolTip(labelRelays, string.Join("\n", _nostrAccess.Relays.Select(r => r.ToString())));
+                            break;
+                        default:
+                            labelRelays.Text = $"{_nostrAccess.Relays.Length} relays";
+                            toolTipRelays.SetToolTip(labelRelays, string.Join("\n", _nostrAccess.Relays.Select(r => r.ToString())));
+                            break;
+                    }
+                    if (null != _nostrAccess.Clients)
+                    {
+                        _nostrAccess.Clients.EventsReceived += OnClientOnEventsReceived;
+                    }
+                }
+
                 if (0 == connectCount)
                 {
                     textBoxTimeline.Text = "> No relay enabled." + Environment.NewLine + textBoxTimeline.Text;
@@ -145,7 +158,7 @@ namespace noka
                 textBoxTimeline.Text = string.Empty;
                 textBoxTimeline.Text = "> Connect." + Environment.NewLine + textBoxTimeline.Text;
 
-                Subscribe();
+                _nostrAccess.Subscribe();
 
                 buttonStart.Enabled = false;
                 buttonStop.Enabled = true;
@@ -156,7 +169,7 @@ namespace noka
                 if (!string.IsNullOrEmpty(_npubHex))
                 {
                     // フォロイーを購読をする
-                    SubscribeFollows(_npubHex);
+                    _nostrAccess.SubscribeFollows(_npubHex);
 
                     // ログインユーザー表示名取得
                     var name = GetUserName(_npubHex);
@@ -171,80 +184,8 @@ namespace noka
         }
         #endregion
 
-        #region 接続処理
-        /// <summary>
-        /// 接続処理
-        /// </summary>
-        /// <returns></returns>
-        private async Task<int> ConnectAsync()
-        {
-            if (null == _client)
-            {
-                _relays = Tools.GetEnabledRelays();
-                switch (_relays.Length)
-                {
-                    case 0:
-                        labelRelays.Text = "0 relays";
-                        toolTipRelays.SetToolTip(labelRelays, string.Empty);
-                        return 0;
-                    case 1:
-                        labelRelays.Text = _relays[0].ToString();
-                        toolTipRelays.SetToolTip(labelRelays, string.Join("\n", _relays.Select(r => r.ToString())));
-                        break;
-                    default:
-                        labelRelays.Text = $"{_relays.Length} relays";
-                        toolTipRelays.SetToolTip(labelRelays, string.Join("\n", _relays.Select(r => r.ToString())));
-                        break;
-                }
 
-                _client = new CompositeNostrClient(_relays);
 
-                await _client.Connect();
-                _client.EventsReceived += OnClientOnEventsReceived;
-            }
-            else
-            {
-                var hasClosed = false;
-                foreach (var state in _client.States)
-                {
-                    if (WebSocketState.CloseReceived < state.Value)
-                    {
-                        hasClosed = true;
-                        break;
-                    }
-                }
-                if (hasClosed)
-                {
-                    await _client.Connect();
-                }
-            }
-            return _client.States.Count;
-        }
-        #endregion
-
-        #region タイムライン購読処理
-        /// <summary>
-        /// タイムライン購読処理
-        /// </summary>
-        private void Subscribe()
-        {
-            if (null == _client)
-            {
-                return;
-            }
-
-            _ = _client.CreateSubscription(
-                    _subscriptionId,
-                    [
-                        new NostrSubscriptionFilter()
-                        {
-                            Kinds = [1,7], // 1: テキストノート, 7: リアクション
-                            Since = DateTimeOffset.Now - _timeSpan,
-                        }
-                    ]
-                 );
-        }
-        #endregion
 
         #region イベント受信時処理
         /// <summary>
@@ -256,7 +197,7 @@ namespace noka
         {
             Debug.WriteLine("_followeesHexs.Count " + _followeesHexs.Count);
             // タイムライン購読
-            if (args.subscriptionId == _subscriptionId)
+            if (args.subscriptionId == _nostrAccess.SubscriptionId)
             {
                 foreach (var nostrEvent in args.events)
                 {
@@ -439,7 +380,7 @@ namespace noka
                 }
             }
             // フォロイー購読
-            else if (args.subscriptionId == _getFolloweesSubscriptionId)
+            else if (args.subscriptionId == _nostrAccess.GetFolloweesSubscriptionId)
             {
                 foreach (var nostrEvent in args.events)
                 {
@@ -460,7 +401,7 @@ namespace noka
                 }
             }
             // プロフィール購読
-            else if (args.subscriptionId == _getProfilesSubscriptionId)
+            else if (args.subscriptionId == _nostrAccess.GetProfilesSubscriptionId)
             {
                 //// ※nostrEventが返ってこない特定ユーザーがいる。ライブラリの問題か。
                 foreach (var nostrEvent in args.events)
@@ -505,30 +446,28 @@ namespace noka
         // Stopボタン
         private void ButtonStop_Click(object sender, EventArgs e)
         {
-            if (null == _client)
+            if (null != _nostrAccess.Clients)
             {
-                return;
-            }
+                try
+                {
+                    _nostrAccess.CloseSubscriptions();
+                    textBoxTimeline.Text = "> Close subscription." + Environment.NewLine + textBoxTimeline.Text;
 
-            try
-            {
-                _ = _client.CloseSubscription(_subscriptionId);
-                _ = _client.CloseSubscription(_getFolloweesSubscriptionId);
-                _ = _client.CloseSubscription(_getProfilesSubscriptionId);
-                textBoxTimeline.Text = "> Close subscription." + Environment.NewLine + textBoxTimeline.Text;
-                _ = _client.Disconnect();
-                textBoxTimeline.Text = "> Disconnect." + Environment.NewLine + textBoxTimeline.Text;
-                _client.Dispose();
-                _client = null;
+                    _ = _nostrAccess.Clients.Disconnect();
+                    textBoxTimeline.Text = "> Disconnect." + Environment.NewLine + textBoxTimeline.Text;
+                    _nostrAccess.Clients.Dispose();
+                    _nostrAccess.Clients = null;
 
-                buttonStart.Enabled = true;
-                buttonStart.Focus();
-                buttonStop.Enabled = false;
-            }
-            catch (Exception ex)
-            {
-                Debug.Print(ex.ToString());
-                textBoxTimeline.Text = "> Could not stop." + Environment.NewLine + textBoxTimeline.Text;
+                    buttonStart.Enabled = true;
+                    buttonStart.Focus();
+                    buttonStop.Enabled = false;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("ButtonStop_Click: " + ex.Message);
+                    Debug.Print(ex.ToString());
+                    textBoxTimeline.Text = "> Could not stop." + Environment.NewLine + textBoxTimeline.Text;
+                }
             }
         }
         #endregion
@@ -583,7 +522,7 @@ namespace noka
                 // ログイン済みの時
                 if (!string.IsNullOrEmpty(_npubHex))
                 {
-                    int connectCount = await ConnectAsync();
+                    int connectCount = await _nostrAccess.ConnectAsync();
                     if (0 == connectCount)
                     {
                         textBoxTimeline.Text = "> No relay enabled." + Environment.NewLine + textBoxTimeline.Text;
@@ -591,7 +530,7 @@ namespace noka
                     }
 
                     // フォロイーを購読をする
-                    SubscribeFollows(_npubHex);
+                    _nostrAccess.SubscribeFollows(_npubHex);
 
                     // ログインユーザー表示名取得
                     var name = GetUserName(_npubHex);
@@ -621,12 +560,14 @@ namespace noka
         /// 複数リレーからの処理済みイベントを除外
         /// </summary>
         /// <param name="eventId"></param>
+        /// <returns>処理済みイベントの有無</returns>
         private bool RemoveCompletedEventIds(string eventId)
         {
             if (_displayedEventIds.Contains(eventId))
             {
                 return true;
             }
+
             if (_displayedEventIds.Count >= 128)
             {
                 _displayedEventIds.RemoveFirst();
@@ -636,55 +577,7 @@ namespace noka
         }
         #endregion
 
-        #region フォロイー購読
-        /// <summary>
-        /// フォロイー購読
-        /// </summary>
-        /// <param name="author"></param>
-        private void SubscribeFollows(string author)
-        {
-            if (null == _client)
-            {
-                return;
-            }
 
-            _ = _client.CreateSubscription(
-                    _getFolloweesSubscriptionId,
-                    [
-                        new NostrSubscriptionFilter
-                        {
-                            Kinds = [3],
-                            Authors = [author]
-                        }
-                    ]
-                 );
-        }
-        #endregion
-
-        #region プロフィール購読
-        /// <summary>
-        /// プロフィール購読
-        /// </summary>
-        /// <param name="authors"></param>
-        private void SubscribeProfiles(string[] authors)
-        {
-            if (null == _client)
-            {
-                return;
-            }
-
-            _ = _client.CreateSubscription(
-                    _getProfilesSubscriptionId,
-                    [
-                        new NostrSubscriptionFilter
-                        {
-                            Kinds = [0],
-                            Authors = authors
-                        }
-                    ]
-                 );
-        }
-        #endregion
 
         #region 透明解除処理
         // マウス入った時
@@ -739,7 +632,7 @@ namespace noka
             }
             */
             // kind 0 を毎回購読するように変更（頻繁にdisplay_name等を変更するユーザーがいるため）
-            SubscribeProfiles([publicKeyHex]);
+            _nostrAccess.SubscribeProfiles([publicKeyHex]);
 
             // 情報があれば表示名を取得
             Users.TryGetValue(publicKeyHex, out User? user);
@@ -779,27 +672,12 @@ namespace noka
         }
         #endregion
 
-        #region 閉じる
-        // 閉じる
+        #region 閉じる時
+        // 閉じる時
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (null != _client)
-            {
-                foreach (var state in _client.States)
-                {
-                    if (WebSocketState.Open == state.Value)
-                    {
-                        _client.CloseSubscription(_subscriptionId);
-                        _client.CloseSubscription(_getFolloweesSubscriptionId);
-                        _client.CloseSubscription(_getProfilesSubscriptionId);
-                        _client.Disconnect();
-                    }
-                }
-                _ = _client.Disconnect();
-                _client.Dispose();
-                _client = null;
-            }
-
+            _nostrAccess.CloseSubscriptions();
+            _nostrAccess.DisconnectAndDispose();
 
             if (FormWindowState.Normal != WindowState)
             {
