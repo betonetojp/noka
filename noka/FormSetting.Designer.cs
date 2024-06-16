@@ -45,6 +45,12 @@
             checkBoxShowOnlyFollowees = new CheckBox();
             label4 = new Label();
             textBoxCutNameLength = new TextBox();
+            comboBoxGhosts = new ComboBox();
+            textBoxPreferredGhost = new TextBox();
+            buttonPrefer = new Button();
+            buttonClear = new Button();
+            label7 = new Label();
+            label8 = new Label();
             ((System.ComponentModel.ISupportInitialize)trackBarOpacity).BeginInit();
             SuspendLayout();
             // 
@@ -53,12 +59,12 @@
             textBoxNpub.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             textBoxNpub.BorderStyle = BorderStyle.FixedSingle;
             textBoxNpub.ImeMode = ImeMode.Disable;
-            textBoxNpub.Location = new Point(79, 145);
+            textBoxNpub.Location = new Point(82, 203);
             textBoxNpub.MaxLength = 136;
             textBoxNpub.Name = "textBoxNpub";
             textBoxNpub.PlaceholderText = "npub1 . . .";
-            textBoxNpub.Size = new Size(193, 23);
-            textBoxNpub.TabIndex = 13;
+            textBoxNpub.Size = new Size(190, 23);
+            textBoxNpub.TabIndex = 11;
             // 
             // textBoxCutLength
             // 
@@ -73,7 +79,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(12, 40);
+            label1.Location = new Point(12, 39);
             label1.Name = "label1";
             label1.Size = new Size(82, 15);
             label1.TabIndex = 0;
@@ -113,7 +119,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(12, 147);
+            label3.Location = new Point(12, 205);
             label3.Name = "label3";
             label3.Size = new Size(61, 15);
             label3.TabIndex = 0;
@@ -147,7 +153,7 @@
             linkLabelIcons8.Location = new Point(231, 237);
             linkLabelIcons8.Name = "linkLabelIcons8";
             linkLabelIcons8.Size = new Size(41, 15);
-            linkLabelIcons8.TabIndex = 15;
+            linkLabelIcons8.TabIndex = 13;
             linkLabelIcons8.TabStop = true;
             linkLabelIcons8.Text = "Icons8";
             linkLabelIcons8.LinkClicked += LinkLabelIcons8_LinkClicked;
@@ -168,7 +174,7 @@
             labelVersion.Name = "labelVersion";
             labelVersion.Size = new Size(37, 15);
             labelVersion.TabIndex = 0;
-            labelVersion.Text = "v0.1.2";
+            labelVersion.Text = "v0.1.3";
             // 
             // labelOpacity
             // 
@@ -185,14 +191,14 @@
             checkBoxShowOnlyFollowees.Location = new Point(12, 120);
             checkBoxShowOnlyFollowees.Name = "checkBoxShowOnlyFollowees";
             checkBoxShowOnlyFollowees.Size = new Size(134, 19);
-            checkBoxShowOnlyFollowees.TabIndex = 12;
+            checkBoxShowOnlyFollowees.TabIndex = 6;
             checkBoxShowOnlyFollowees.Text = "Show only followees";
             checkBoxShowOnlyFollowees.UseVisualStyleBackColor = true;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(12, 69);
+            label4.Location = new Point(12, 68);
             label4.Name = "label4";
             label4.Size = new Size(70, 15);
             label4.TabIndex = 0;
@@ -208,11 +214,73 @@
             textBoxCutNameLength.Size = new Size(26, 23);
             textBoxCutNameLength.TabIndex = 4;
             // 
+            // comboBoxGhosts
+            // 
+            comboBoxGhosts.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxGhosts.FormattingEnabled = true;
+            comboBoxGhosts.Location = new Point(82, 145);
+            comboBoxGhosts.Name = "comboBoxGhosts";
+            comboBoxGhosts.Size = new Size(138, 23);
+            comboBoxGhosts.TabIndex = 7;
+            // 
+            // textBoxPreferredGhost
+            // 
+            textBoxPreferredGhost.BorderStyle = BorderStyle.FixedSingle;
+            textBoxPreferredGhost.Location = new Point(82, 174);
+            textBoxPreferredGhost.Name = "textBoxPreferredGhost";
+            textBoxPreferredGhost.ReadOnly = true;
+            textBoxPreferredGhost.Size = new Size(138, 23);
+            textBoxPreferredGhost.TabIndex = 9;
+            // 
+            // buttonPrefer
+            // 
+            buttonPrefer.Location = new Point(226, 145);
+            buttonPrefer.Name = "buttonPrefer";
+            buttonPrefer.Size = new Size(46, 23);
+            buttonPrefer.TabIndex = 8;
+            buttonPrefer.Text = "Prefer";
+            buttonPrefer.UseVisualStyleBackColor = true;
+            buttonPrefer.Click += ButtonPrefer_Click;
+            // 
+            // buttonClear
+            // 
+            buttonClear.Location = new Point(226, 174);
+            buttonClear.Name = "buttonClear";
+            buttonClear.Size = new Size(46, 23);
+            buttonClear.TabIndex = 10;
+            buttonClear.Text = "Clear";
+            buttonClear.UseVisualStyleBackColor = true;
+            buttonClear.Click += ButtonClear_Click;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(12, 149);
+            label7.Name = "label7";
+            label7.Size = new Size(64, 15);
+            label7.TabIndex = 0;
+            label7.Text = "SSP ghosts";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(21, 178);
+            label8.Name = "label8";
+            label8.Size = new Size(55, 15);
+            label8.TabIndex = 0;
+            label8.Text = "Preferred";
+            // 
             // FormSetting
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(284, 261);
+            Controls.Add(label8);
+            Controls.Add(label7);
+            Controls.Add(buttonClear);
+            Controls.Add(buttonPrefer);
+            Controls.Add(textBoxPreferredGhost);
+            Controls.Add(comboBoxGhosts);
             Controls.Add(label4);
             Controls.Add(textBoxCutNameLength);
             Controls.Add(checkBoxShowOnlyFollowees);
@@ -265,5 +333,11 @@
         internal CheckBox checkBoxShowOnlyFollowees;
         private Label label4;
         internal TextBox textBoxCutNameLength;
+        private ComboBox comboBoxGhosts;
+        private Button buttonPrefer;
+        private Button buttonClear;
+        private Label label7;
+        private Label label8;
+        internal TextBox textBoxPreferredGhost;
     }
 }

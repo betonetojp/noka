@@ -84,8 +84,8 @@ namespace noka
             _ds.Dispose();
         }
 
-        #region Startボタン
-        // Startボタン
+        #region Start
+        // Start
         private static async void Start()
         {
             try
@@ -351,7 +351,6 @@ namespace noka
             // プロフィール購読
             else if (args.subscriptionId == _nostrAccess.GetProfilesSubscriptionId)
             {
-                //// ※nostrEventが返ってこない特定ユーザーがいる。ライブラリの問題か。
                 foreach (var nostrEvent in args.events)
                 {
                     if (RemoveCompletedEventIds(nostrEvent.Id))

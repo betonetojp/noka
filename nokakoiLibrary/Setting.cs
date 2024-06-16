@@ -25,6 +25,7 @@ namespace noka
             public double Opacity { get; set; } = 1.00;
             public bool DisplayTime { get; set; } = true;
             public bool ShowOnlyFollowees { get; set; } = false;
+            public string Ghost { get; set; } = string.Empty;
             public string Npub { get; set; } = string.Empty;
             public string UnkownPicture { get; set; } = string.Empty;
         }
@@ -131,6 +132,17 @@ namespace noka
             set
             {
                 _data.ShowOnlyFollowees = value;
+            }
+        }
+        public static string Ghost
+        {
+            get
+            {
+                return _data.Ghost;
+            }
+            set
+            {
+                _data.Ghost = value;
             }
         }
         public static string Npub

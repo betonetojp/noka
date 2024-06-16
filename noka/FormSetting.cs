@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using SSTPLib;
+using System.Diagnostics;
 
 namespace noka
 {
@@ -12,6 +13,7 @@ namespace noka
         private void FormSetting_Load(object sender, EventArgs e)
         {
             labelOpacity.Text = $"{trackBarOpacity.Value}%";
+            SearchGhost();
         }
 
         private void TrackBarOpacity_Scroll(object sender, EventArgs e)
@@ -39,6 +41,33 @@ namespace noka
             if (e.KeyCode == Keys.Escape)
             {
                 Close();
+            }
+        }
+
+        private void ButtonPrefer_Click(object sender, EventArgs e)
+        {
+            textBoxPreferredGhost.Text = comboBoxGhosts.Text;
+        }
+
+        private void ButtonClear_Click(object sender, EventArgs e)
+        {
+            textBoxPreferredGhost.Text = string.Empty;
+        }
+
+        private void SearchGhost()
+        {
+            comboBoxGhosts.Items.Clear();
+            SakuraFMO fmo = new("SakuraUnicode");
+            fmo.Update(true);
+            string[] names = fmo.GetGhostNames();
+            if (names.Length > 0)
+            {
+                comboBoxGhosts.Items.AddRange(names);
+                comboBoxGhosts.SelectedIndex = 0;
+                if (!string.IsNullOrEmpty(textBoxPreferredGhost.Text))
+                {
+                    comboBoxGhosts.SelectedItem = textBoxPreferredGhost.Text;
+                }
             }
         }
     }

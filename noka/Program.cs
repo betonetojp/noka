@@ -1,5 +1,3 @@
-using noka;
-
 namespace noka
 {
     internal static class Program

@@ -17,18 +17,24 @@ Nostrのリレーサーバーに接続してグローバルタイムラインを
 
 本体の余白を右クリックまたはF10キーでユーザーミュートとキーワード通知の設定画面が開きます。
 
-タイムラインを『伺か』(SSP)に流すことができます。
+タイムラインを「伺か」(SSP)に流すことができます。
 https://ssp.shillest.net/
 
 GhostSpeakerと棒読みちゃんを組み合わせて読み上げさせるのがおすすめです。
 https://github.com/apxxxxxxe/GhostSpeaker
 https://chi.usamimi.info/Program/Application/BouyomiChan/
 
-「伺か」用ゴーストnostalkのNostrイベント通知(Nostr/0.3)に対応しアバター画像を送信できます。
+「伺か」(SSP)用ゴースト「nostalk」のNostrイベント通知(Nostr/0.4)に対応しアバター画像を送信できます。
 https://github.com/nikolat/nostalk
+
+「伺か」用プラグイン「nokauka」でnokaの更新と起動ができます。
+https://github.com/nikolat/nokauka
 
 
 ◆ 更新履歴
+
+2024/06/17 ver. 0.1.3
+送信するゴーストを選択できるようにしました。
 
 2024/06/15 ver. 0.1.2
 プロフィールのtagsに絵文字があるとプロフィールを取得できなっかった問題を修正しました。

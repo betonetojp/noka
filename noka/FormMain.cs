@@ -100,6 +100,7 @@ namespace noka
             }
             _displayTime = Setting.DisplayTime;
             _showOnlyFollowees = Setting.ShowOnlyFollowees;
+            _ghostName = Setting.Ghost;
             _npub = Setting.Npub;
             try
             {
@@ -184,9 +185,6 @@ namespace noka
         }
         #endregion
 
-
-
-
         #region イベント受信時処理
         /// <summary>
         /// イベント受信時処理
@@ -257,7 +255,8 @@ namespace noka
                                         Relays = [string.Empty],
                                     };
                                     var nevent = nostrEventNote.ToNIP19();
-                                    SearchGhost();
+                                    //SearchGhost();
+                                    _ds.Update();
                                     Dictionary<string, string> SSTPHeader = new(_baseSSTPHeader)
                                     {
                                         { "Reference1", "7" }, // kind
@@ -314,7 +313,8 @@ namespace noka
                                     Relays = [string.Empty],
                                 };
                                 var nevent = nostrEventNote.ToNIP19();
-                                SearchGhost();
+                                //SearchGhost();
+                                _ds.Update();
 
                                 string msg = content;
                                 // 本文カット
@@ -335,7 +335,7 @@ namespace noka
                                 };
                                 string sstpmsg = _SSTPMethod + "\r\n" + String.Join("\r\n", SSTPHeader.Select(kvp => kvp.Key + ": " + kvp.Value.Replace("\n", "\\n"))) + "\r\n\r\n";
                                 string r = _ds.GetSSTPResponse(_ghostName, sstpmsg);
-                                //Debug.WriteLine(r);
+                                Debug.WriteLine(r);
                             }
 
                             // キーワード通知
@@ -403,7 +403,6 @@ namespace noka
             // プロフィール購読
             else if (args.subscriptionId == _nostrAccess.GetProfilesSubscriptionId)
             {
-                //// ※nostrEventが返ってこない特定ユーザーがいる。ライブラリの問題か。
                 foreach (var nostrEvent in args.events)
                 {
                     if (RemoveCompletedEventIds(nostrEvent.Id))
@@ -484,6 +483,7 @@ namespace noka
             _formSetting.checkBoxDisplayTime.Checked = _displayTime;
             _formSetting.checkBoxShowOnlyFollowees.Checked = _showOnlyFollowees;
             _formSetting.textBoxNpub.Text = _npub;
+            _formSetting.textBoxPreferredGhost.Text = _ghostName;
 
             // 開く
             _formSetting.ShowDialog(this);
@@ -509,6 +509,7 @@ namespace noka
             Opacity = _formSetting.trackBarOpacity.Value / 100.0;
             _displayTime = _formSetting.checkBoxDisplayTime.Checked;
             _showOnlyFollowees = _formSetting.checkBoxShowOnlyFollowees.Checked;
+            _ghostName = _formSetting.textBoxPreferredGhost.Text;
             _npub = _formSetting.textBoxNpub.Text;
             try
             {
@@ -549,6 +550,7 @@ namespace noka
             Setting.Opacity = Opacity;
             Setting.DisplayTime = _displayTime;
             Setting.ShowOnlyFollowees = _showOnlyFollowees;
+            Setting.Ghost = _ghostName;
             Setting.Npub = _npub;
 
             Setting.Save(_configPath);
@@ -577,8 +579,6 @@ namespace noka
         }
         #endregion
 
-
-
         #region 透明解除処理
         // マウス入った時
         private void TextBoxTimeline_MouseEnter(object sender, EventArgs e)
@@ -598,22 +598,22 @@ namespace noka
         /// <summary>
         /// SSPゴースト名を取得する
         /// </summary>
-        private void SearchGhost()
-        {
-            _ds.Update();
-            SakuraFMO fmo = (SakuraFMO)_ds.FMO;
-            var names = fmo.GetGhostNames();
-            if (names.Length > 0)
-            {
-                _ghostName = names.First(); // とりあえず先頭で
-                //Debug.Print(_ghostName);
-            }
-            else
-            {
-                _ghostName = string.Empty;
-                //Debug.Print("ゴーストがいません");
-            }
-        }
+        //private void SearchGhost()
+        //{
+        //    _ds.Update();
+        //    SakuraFMO fmo = (SakuraFMO)_ds.FMO;
+        //    var names = fmo.GetGhostNames();
+        //    if (names.Length > 0)
+        //    {
+        //        _ghostName = names.First(); // とりあえず先頭で
+        //        //Debug.Print(_ghostName);
+        //    }
+        //    else
+        //    {
+        //        _ghostName = string.Empty;
+        //        //Debug.Print("ゴーストがいません");
+        //    }
+        //}
         #endregion
 
         #region ユーザー表示名を取得する
