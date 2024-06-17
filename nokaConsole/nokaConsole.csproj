@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\nokakoiLibrary\nokakoiLibrary.csproj" />
+    <ProjectReference Include="..\NNostr.Client\NNostr.Client.csproj" />
     <ProjectReference Include="..\SSTPLib\SSTPLib.csproj" />
   </ItemGroup>
 

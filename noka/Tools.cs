@@ -39,18 +39,20 @@ namespace noka
 
     public static class Tools
     {
-        private static readonly string _usersJsonPath = Path.Combine(GetAppPath(), "users.json");
-        private static readonly string _relaysJsonPath = Path.Combine(GetAppPath(), "relays.json");
+        //private static readonly string _usersJsonPath = Path.Combine(GetAppPath(), "users.json");
+        private static readonly string _usersJsonPath = Path.Combine(Application.StartupPath, "users.json");
+        //private static readonly string _relaysJsonPath = Path.Combine(GetAppPath(), "relays.json");
+        private static readonly string _relaysJsonPath = Path.Combine(Application.StartupPath, "relays.json");
 
-        public static string GetAppPath()
-        {
-            string appPath = string.Empty;
-            if (null != System.Reflection.Assembly.GetExecutingAssembly().Location)
-            {
-                appPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) ?? string.Empty;
-            }
-            return appPath;
-        }
+        //public static string GetAppPath() // DLLから呼ばれた場合、DLLのパスになってしまうので注意
+        //{
+        //    string appPath = string.Empty;
+        //    if (null != System.Reflection.Assembly.GetExecutingAssembly().Location)
+        //    {
+        //        appPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) ?? string.Empty;
+        //    }
+        //    return appPath;
+        //}
         /// <summary>
         /// JSONからユーザーを作成
         /// </summary>
