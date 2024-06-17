@@ -172,9 +172,9 @@
             labelVersion.AutoSize = true;
             labelVersion.Location = new Point(12, 237);
             labelVersion.Name = "labelVersion";
-            labelVersion.Size = new Size(37, 15);
+            labelVersion.Size = new Size(46, 15);
             labelVersion.TabIndex = 0;
-            labelVersion.Text = "v0.1.3";
+            labelVersion.Text = "v0.1.3.1";
             // 
             // labelOpacity
             // 

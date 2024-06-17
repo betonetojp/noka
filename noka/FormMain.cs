@@ -193,7 +193,6 @@ namespace noka
         /// <param name="args"></param>
         private void OnClientOnEventsReceived(object? sender, (string subscriptionId, NostrEvent[] events) args)
         {
-            Debug.WriteLine("_followeesHexs.Count " + _followeesHexs.Count);
             // É^ÉCÉÄÉâÉCÉìçwì«
             if (args.subscriptionId == _nostrAccess.SubscriptionId)
             {
