@@ -428,6 +428,7 @@ namespace noka
                             if (null == cratedAt || (cratedAt < newUserData.CreatedAt))
                             {
                                 newUserData.LastActivity = DateTime.Now;
+                                Tools.SaveUsers(Users);
                                 // 辞書に追加（上書き）
                                 Users[nostrEvent.PublicKey] = newUserData;
                                 Debug.WriteLine($"cratedAt updated {cratedAt} -> {newUserData.CreatedAt}");
@@ -646,6 +647,7 @@ namespace noka
                 }
                 // 取得日更新
                 user.LastActivity = DateTime.Now;
+                Tools.SaveUsers(Users);
                 Debug.WriteLine($"ユーザー名取得 {user.LastActivity} {user.DisplayName} {user.Name}");
             }
             return userName;
