@@ -252,7 +252,7 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Mute and keyword notification";
             FormClosing += FormManiacs_FormClosing;
-            Load += FormUsers_Load;
+            Load += FormManiacs_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridViewUsers).EndInit();
             ResumeLayout(false);
             PerformLayout();

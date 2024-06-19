@@ -121,9 +121,9 @@ namespace noka
         }
         #endregion
 
-        #region フォロイー購読購読処理
+        #region フォロイー購読処理
         /// <summary>
-        /// フォロイー購読購読処理
+        /// フォロイー購読処理
         /// </summary>
         /// <param name="author"></param>
         public void SubscribeFollows(string author)
@@ -146,9 +146,9 @@ namespace noka
         }
         #endregion
 
-        #region プロフィール購読購読処理
+        #region プロフィール購読処理
         /// <summary>
-        /// プロフィール購読購読処理
+        /// プロフィール購読処理
         /// </summary>
         /// <param name="authors"></param>
         public void SubscribeProfiles(string[] authors)
