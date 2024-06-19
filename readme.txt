@@ -33,6 +33,9 @@ https://github.com/nikolat/nokauka
 
 ◆ 更新履歴
 
+2024/06/19 ver. 0.1.4
+users.jsonの保存タイミングを変更しました。
+
 2024/06/17 ver. 0.1.3.1
 nokaukaから起動した時に.jsonファイルの保存場所が変わってしまっていたのを修正しました。
 
