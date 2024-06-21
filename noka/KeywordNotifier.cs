@@ -15,7 +15,7 @@ namespace noka
         [JsonPropertyName("file_name")]
         public string FileName { get; set; } = string.Empty;
         [JsonPropertyName("mute_mostr")]
-        public bool MuteMostr { get; set; } = true;
+        public bool MuteMostr { get; set; }
     }
 
     public class KeywordNotifier

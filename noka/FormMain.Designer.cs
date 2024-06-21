@@ -43,7 +43,7 @@
             // 
             buttonStart.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             buttonStart.Image = Properties.Resources.icons8_start_16;
-            buttonStart.Location = new Point(131, 12);
+            buttonStart.Location = new Point(211, 12);
             buttonStart.Name = "buttonStart";
             buttonStart.Size = new Size(23, 23);
             buttonStart.TabIndex = 2;
@@ -61,7 +61,7 @@
             textBoxTimeline.Name = "textBoxTimeline";
             textBoxTimeline.ReadOnly = true;
             textBoxTimeline.ScrollBars = ScrollBars.Vertical;
-            textBoxTimeline.Size = new Size(200, 148);
+            textBoxTimeline.Size = new Size(280, 228);
             textBoxTimeline.TabIndex = 5;
             textBoxTimeline.TabStop = false;
             textBoxTimeline.MouseEnter += TextBoxTimeline_MouseEnter;
@@ -72,7 +72,7 @@
             buttonStop.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             buttonStop.Enabled = false;
             buttonStop.Image = Properties.Resources.icons8_stop_16;
-            buttonStop.Location = new Point(160, 12);
+            buttonStop.Location = new Point(240, 12);
             buttonStop.Name = "buttonStop";
             buttonStop.Size = new Size(23, 23);
             buttonStop.TabIndex = 3;
@@ -83,7 +83,7 @@
             // 
             buttonSetting.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             buttonSetting.Image = Properties.Resources.icons8_setting_16;
-            buttonSetting.Location = new Point(189, 12);
+            buttonSetting.Location = new Point(269, 12);
             buttonSetting.Name = "buttonSetting";
             buttonSetting.Size = new Size(23, 23);
             buttonSetting.TabIndex = 4;
@@ -107,7 +107,7 @@
             labelRelays.ForeColor = SystemColors.GrayText;
             labelRelays.Location = new Point(41, 16);
             labelRelays.Name = "labelRelays";
-            labelRelays.Size = new Size(84, 15);
+            labelRelays.Size = new Size(164, 15);
             labelRelays.TabIndex = 0;
             labelRelays.Text = "Relay info";
             // 
@@ -115,7 +115,7 @@
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
-            ClientSize = new Size(224, 201);
+            ClientSize = new Size(304, 281);
             Controls.Add(labelRelays);
             Controls.Add(buttonRelayList);
             Controls.Add(buttonSetting);
