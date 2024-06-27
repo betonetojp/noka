@@ -34,7 +34,6 @@ namespace noka
 
         private int _cutLength;
         private int _cutNameLength;
-        private bool _displayTime;
         private bool _showOnlyFollowees;
 
         private double _tempOpacity = 1.00;
@@ -98,7 +97,6 @@ namespace noka
             {
                 Opacity = 1;
             }
-            _displayTime = Setting.DisplayTime;
             _showOnlyFollowees = Setting.ShowOnlyFollowees;
             _ghostName = Setting.Ghost;
             _npub = Setting.Npub;
@@ -262,7 +260,7 @@ namespace noka
                                         { "Reference2", content }, // content
                                         { "Reference3", user?.Name ?? "???" }, // name
                                         { "Reference4", user?.DisplayName ?? string.Empty }, // display_name
-                                        { "Reference5", user?.Picture ?? Setting.UnkownPicture }, // picture
+                                        { "Reference5", user?.Picture ?? string.Empty }, // picture
                                         { "Reference6", nevent }, // nevent1...
                                         { "Reference7", nostrEvent.PublicKey.ConvertToNpub() }, // npub1...
                                         { "Script", $"{speaker}リアクション {userName}\\n{content}\\e" }
@@ -272,8 +270,7 @@ namespace noka
                                     //Debug.WriteLine(r);
                                 }
                                 // 画面に表示
-                                textBoxTimeline.Text = "+" + (_displayTime ? timeString : string.Empty)
-                                             + " " + userName + " " + content + Environment.NewLine + textBoxTimeline.Text;
+                                textBoxTimeline.Text = "+" + timeString + " " + userName + " " + content + Environment.NewLine + textBoxTimeline.Text;
                             }
                         }
                         // テキストノート
@@ -327,7 +324,7 @@ namespace noka
                                     { "Reference2", content }, // content
                                     { "Reference3", user?.Name ?? "???" }, // name
                                     { "Reference4", user?.DisplayName ?? string.Empty }, // display_name
-                                    { "Reference5", user?.Picture ?? Setting.UnkownPicture }, // picture
+                                    { "Reference5", user?.Picture ?? string.Empty }, // picture
                                     { "Reference6", nevent }, // nevent1...
                                     { "Reference7", nostrEvent.PublicKey.ConvertToNpub() }, // npub1...
                                     { "Script", $"{speaker}{userName}\\n{msg}\\e" }
@@ -371,7 +368,7 @@ namespace noka
                             }
                             // 画面に表示
                             textBoxTimeline.Text = (iSnokakoi ? "[n]" : string.Empty) + headMark
-                                                 + (_displayTime ? $"{timeString} {userName}{Environment.NewLine}" : string.Empty)
+                                                 + $"{timeString} {userName}{Environment.NewLine}"
                                                  + " " + content + Environment.NewLine + textBoxTimeline.Text;
                             Debug.WriteLine($"{timeString} {userName} {content}");
                         }
@@ -480,7 +477,6 @@ namespace noka
             _formSetting.textBoxCutLength.Text = _cutLength.ToString();
             _formSetting.textBoxCutNameLength.Text = _cutNameLength.ToString();
             _formSetting.trackBarOpacity.Value = (int)(Opacity * 100);
-            _formSetting.checkBoxDisplayTime.Checked = _displayTime;
             _formSetting.checkBoxShowOnlyFollowees.Checked = _showOnlyFollowees;
             _formSetting.textBoxNpub.Text = _npub;
             _formSetting.textBoxPreferredGhost.Text = _ghostName;
@@ -507,7 +503,6 @@ namespace noka
                 _cutNameLength = 1;
             }
             Opacity = _formSetting.trackBarOpacity.Value / 100.0;
-            _displayTime = _formSetting.checkBoxDisplayTime.Checked;
             _showOnlyFollowees = _formSetting.checkBoxShowOnlyFollowees.Checked;
             _ghostName = _formSetting.textBoxPreferredGhost.Text;
             _npub = _formSetting.textBoxNpub.Text;
@@ -548,7 +543,6 @@ namespace noka
             Setting.CutLength = _cutLength;
             Setting.CutNameLength = _cutNameLength;
             Setting.Opacity = Opacity;
-            Setting.DisplayTime = _displayTime;
             Setting.ShowOnlyFollowees = _showOnlyFollowees;
             Setting.Ghost = _ghostName;
             Setting.Npub = _npub;

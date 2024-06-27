@@ -23,11 +23,9 @@ namespace noka
             public int CutLength { get; set; } = 40;
             public int CutNameLength { get; set; } = 8;
             public double Opacity { get; set; } = 1.00;
-            public bool DisplayTime { get; set; } = true;
             public bool ShowOnlyFollowees { get; set; } = false;
             public string Ghost { get; set; } = string.Empty;
             public string Npub { get; set; } = string.Empty;
-            public string UnkownPicture { get; set; } = string.Empty;
         }
         #endregion
 
@@ -39,7 +37,6 @@ namespace noka
         {
             public int CutLength { get; set; } = 40;
             public int CutNameLength { get; set; } = 8;
-            public bool DisplayTime { get; set; } = true;
             public bool ShowOnlyFollowees { get; set; } = false;
             public string Npub { get; set; } = string.Empty;
         }
@@ -112,17 +109,6 @@ namespace noka
                 _data.Opacity = value;
             }
         }
-        public static bool DisplayTime
-        {
-            get
-            {
-                return _data.DisplayTime;
-            }
-            set
-            {
-                _data.DisplayTime = value;
-            }
-        }
         public static bool ShowOnlyFollowees
         {
             get
@@ -156,17 +142,6 @@ namespace noka
                 _data.Npub = value;
             }
         }
-        public static string UnkownPicture
-        {
-            get
-            {
-                return _data.UnkownPicture;
-            }
-            set
-            {
-                _data.UnkownPicture = value;
-            }
-        }
         #endregion
 
         #region コンソールプロパティ
@@ -190,17 +165,6 @@ namespace noka
             set
             {
                 _consoleData.CutNameLength = value;
-            }
-        }
-        public static bool ConloleDisplayTime
-        {
-            get
-            {
-                return _consoleData.DisplayTime;
-            }
-            set
-            {
-                _consoleData.DisplayTime = value;
             }
         }
         public static bool ConloleShowOnlyFollowees

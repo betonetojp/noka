@@ -33,6 +33,9 @@ https://github.com/nikolat/nokauka
 
 ◆ 更新履歴
 
+2024/06/27 ver. 0.1.5
+設定画面を整理しました。
+
 2024/06/22 ver. 0.1.4.1
 細部修正
 
