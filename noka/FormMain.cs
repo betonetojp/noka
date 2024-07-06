@@ -294,6 +294,13 @@ namespace noka
                             Users.TryGetValue(nostrEvent.PublicKey, out User? user);
                             // ユーザー表示名取得（ユーザー辞書メモリ節約のため↑のフラグ処理後に）
                             string userName = GetUserName(nostrEvent.PublicKey);
+
+                            // ユーザーが見つからない時は表示しない
+                            if (null == user)
+                            {
+                                continue;
+                            }
+
                             // ユーザー表示名カット
                             if (userName.Length > _cutNameLength)
                             {
