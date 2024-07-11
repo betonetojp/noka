@@ -43,7 +43,7 @@ namespace noka
         private readonly Dictionary<string, string> _baseSSTPHeader = new(){
             {"Charset","UTF-8"},
             {"SecurityLevel","local"},
-            {"Sender","nokakoi"},
+            {"Sender","noka"},
             {"Option","nobreak,notranslate"},
             {"Event","OnNostr"},
             {"Reference0","Nostr/0.4"}
