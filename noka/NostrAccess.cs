@@ -113,7 +113,7 @@ namespace noka
                     [
                         new NostrSubscriptionFilter()
                         {
-                            Kinds = [1,7], // 1: テキストノート, 7: リアクション
+                            Kinds = [1,7,42], // 1: テキストノート, 7: リアクション, 42: チャンネルメッセージ
                             Since = DateTimeOffset.Now - _timeSpan,
                         }
                     ]

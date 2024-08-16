@@ -50,9 +50,10 @@ namespace noka
         };
 
         private string _ghostName = string.Empty;
+        private bool _soleGhostsOnly = false;
         // 重複イベントIDを保存するリスト
         private readonly LinkedList<string> _displayedEventIds = new();
-
+        private List<SoleGhost> _soleGhosts = [new SoleGhost(), new SoleGhost()];
         #endregion
 
         #region コンストラクタ
@@ -99,6 +100,7 @@ namespace noka
             }
             _showOnlyFollowees = Setting.ShowOnlyFollowees;
             _ghostName = Setting.Ghost;
+            _soleGhostsOnly = Setting.SoleGhostsOnly;
             _npub = Setting.Npub;
             try
             {
@@ -256,7 +258,7 @@ namespace noka
                                     _ds.Update();
                                     Dictionary<string, string> SSTPHeader = new(_baseSSTPHeader)
                                     {
-                                        { "Reference1", "7" }, // kind
+                                        { "Reference1", $"{nostrEvent.Kind}" }, // kind
                                         { "Reference2", content }, // content
                                         { "Reference3", user?.Name ?? "???" }, // name
                                         { "Reference4", user?.DisplayName ?? string.Empty }, // display_name
@@ -265,7 +267,7 @@ namespace noka
                                         { "Reference7", nostrEvent.PublicKey.ConvertToNpub() }, // npub1...
                                         { "Script", $"{speaker}リアクション {userName}\\n{content}\\e" }
                                     };
-                                    string sstpmsg = _SSTPMethod + "\r\n" + String.Join("\r\n", SSTPHeader.Select(kvp => kvp.Key + ": " + kvp.Value.Replace("\n", "\\n"))) + "\r\n\r\n";
+                                    string sstpmsg = _SSTPMethod + "\r\n" + string.Join("\r\n", SSTPHeader.Select(kvp => kvp.Key + ": " + kvp.Value.Replace("\n", "\\n"))) + "\r\n\r\n";
                                     string r = _ds.GetSSTPResponse(_ghostName, sstpmsg);
                                     //Debug.WriteLine(r);
                                 }
@@ -274,8 +276,13 @@ namespace noka
                             }
                         }
                         // テキストノート
-                        if (1 == nostrEvent.Kind)
+                        if (1 == nostrEvent.Kind || 42 == nostrEvent.Kind)
                         {
+                            if (42 == nostrEvent.Kind)
+                            {
+                                headMark = "=";
+                            }
+
                             var userClient = nostrEvent.GetTaggedData("client");
                             var iSnokakoi = -1 < Array.IndexOf(userClient, "nokakoi");
 
@@ -294,6 +301,16 @@ namespace noka
                             Users.TryGetValue(nostrEvent.PublicKey, out User? user);
                             // ユーザー表示名取得（ユーザー辞書メモリ節約のため↑のフラグ処理後に）
                             string userName = GetUserName(nostrEvent.PublicKey);
+
+                            bool isSole = false;
+                            foreach (SoleGhost soleGhost in _soleGhosts)
+                            {
+                                if (soleGhost.Npub == nostrEvent.PublicKey.ConvertToNpub())
+                                {
+                                    isSole = true;
+                                    break;
+                                }
+                            }
 
                             // ユーザーが見つからない時は表示しない
                             if (null == user)
@@ -327,18 +344,32 @@ namespace noka
                                 }
                                 Dictionary<string, string> SSTPHeader = new(_baseSSTPHeader)
                                 {
-                                    { "Reference1", "1" },
+                                    { "Reference1", $"{nostrEvent.Kind}" },
                                     { "Reference2", content }, // content
                                     { "Reference3", user?.Name ?? "???" }, // name
                                     { "Reference4", user?.DisplayName ?? string.Empty }, // display_name
                                     { "Reference5", user?.Picture ?? string.Empty }, // picture
                                     { "Reference6", nevent }, // nevent1...
                                     { "Reference7", nostrEvent.PublicKey.ConvertToNpub() }, // npub1...
-                                    { "Script", $"{speaker}{userName}\\n{msg}\\e" }
+                                    { "Script", $"{speaker}{(isSole ? "" : userName)}\\n{msg}\\e" }
                                 };
-                                string sstpmsg = _SSTPMethod + "\r\n" + String.Join("\r\n", SSTPHeader.Select(kvp => kvp.Key + ": " + kvp.Value.Replace("\n", "\\n"))) + "\r\n\r\n";
-                                string r = _ds.GetSSTPResponse(_ghostName, sstpmsg);
-                                Debug.WriteLine(r);
+                                string sstpmsg = _SSTPMethod + "\r\n" + string.Join("\r\n", SSTPHeader.Select(kvp => kvp.Key + ": " + kvp.Value.Replace("\n", "\\n"))) + "\r\n\r\n";
+
+                                string r;
+                                foreach (SoleGhost soleGhost in _soleGhosts)
+                                {
+                                    if (soleGhost.Npub == nostrEvent.PublicKey.ConvertToNpub())
+                                    {
+                                        r = _ds.GetSSTPResponse(soleGhost.GhostName, sstpmsg);
+                                        Debug.WriteLine(r);
+                                    }
+                                }
+
+                                if (!isSole && !_soleGhostsOnly)
+                                {
+                                    r = _ds.GetSSTPResponse(_ghostName, sstpmsg);
+                                    Debug.WriteLine(r);
+                                }
                             }
 
                             // キーワード通知
@@ -429,7 +460,7 @@ namespace noka
                                 // 既にミュートオフのMostrアカウントのミュートを解除
                                 newUserData.Mute = false;
                             }
-                            if (null == cratedAt || (cratedAt < newUserData.CreatedAt))
+                            if (null == cratedAt || cratedAt < newUserData.CreatedAt)
                             {
                                 newUserData.LastActivity = DateTime.Now;
                                 Tools.SaveUsers(Users);
@@ -486,7 +517,8 @@ namespace noka
             _formSetting.trackBarOpacity.Value = (int)(Opacity * 100);
             _formSetting.checkBoxShowOnlyFollowees.Checked = _showOnlyFollowees;
             _formSetting.textBoxNpub.Text = _npub;
-            _formSetting.textBoxPreferredGhost.Text = _ghostName;
+            _formSetting._mainGhost = _ghostName;
+            _formSetting.checkBoxSoleGhostsOnly.Checked = _soleGhostsOnly;
 
             // 開く
             _formSetting.ShowDialog(this);
@@ -511,8 +543,9 @@ namespace noka
             }
             Opacity = _formSetting.trackBarOpacity.Value / 100.0;
             _showOnlyFollowees = _formSetting.checkBoxShowOnlyFollowees.Checked;
-            _ghostName = _formSetting.textBoxPreferredGhost.Text;
+            _ghostName = _formSetting._mainGhost;
             _npub = _formSetting.textBoxNpub.Text;
+            _soleGhostsOnly = _formSetting.checkBoxSoleGhostsOnly.Checked;
             try
             {
                 // 別アカウントログイン失敗に備えてクリアしておく
@@ -552,9 +585,12 @@ namespace noka
             Setting.Opacity = Opacity;
             Setting.ShowOnlyFollowees = _showOnlyFollowees;
             Setting.Ghost = _ghostName;
+            Setting.SoleGhostsOnly = _soleGhostsOnly;
             Setting.Npub = _npub;
 
             Setting.Save(_configPath);
+
+            RefleshGhosts();
         }
         #endregion
 
@@ -695,6 +731,7 @@ namespace noka
             Setting.Save(_configPath);
             Tools.SaveUsers(Users);
             Notifier.SaveSettings(); // 必要ないが更新日時をそろえるため
+            Tools.SaveSoleGhosts(_soleGhosts);
 
             _ds.Dispose();      // FrmMsgReceiverのThread停止せず1000ms待たされるうえにプロセス残るので…
             Application.Exit(); // ←これで殺す。SSTLibに手を入れた方がいいが、とりあえず。
@@ -705,6 +742,7 @@ namespace noka
         // ロード時
         private void FormMain_Load(object sender, EventArgs e)
         {
+            RefleshGhosts();
             ButtonStart_Click(sender, e);
         }
         #endregion
@@ -757,5 +795,10 @@ namespace noka
             _formRelayList.Dispose();
         }
         #endregion
+
+        private void RefleshGhosts()
+        {
+            _soleGhosts = Tools.LoadSoleGhosts();
+        }
     }
 }

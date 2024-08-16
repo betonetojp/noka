@@ -45,12 +45,20 @@
             label4 = new Label();
             textBoxCutNameLength = new TextBox();
             comboBoxGhosts = new ComboBox();
-            textBoxPreferredGhost = new TextBox();
-            buttonPrefer = new Button();
-            buttonClear = new Button();
             label7 = new Label();
-            label8 = new Label();
+            checkBoxSoleGhostsOnly = new CheckBox();
+            tabControlSettings = new TabControl();
+            tabPage1 = new TabPage();
+            tabPage2 = new TabPage();
+            buttonReload = new Button();
+            buttonSave = new Button();
+            buttonDelete = new Button();
+            dataGridViewSoloGhosts = new DataGridView();
             ((System.ComponentModel.ISupportInitialize)trackBarOpacity).BeginInit();
+            tabControlSettings.SuspendLayout();
+            tabPage1.SuspendLayout();
+            tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewSoloGhosts).BeginInit();
             SuspendLayout();
             // 
             // textBoxNpub
@@ -58,27 +66,27 @@
             textBoxNpub.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             textBoxNpub.BorderStyle = BorderStyle.FixedSingle;
             textBoxNpub.ImeMode = ImeMode.Disable;
-            textBoxNpub.Location = new Point(82, 120);
+            textBoxNpub.Location = new Point(73, 114);
             textBoxNpub.MaxLength = 136;
             textBoxNpub.Name = "textBoxNpub";
             textBoxNpub.PlaceholderText = "npub1 . . .";
-            textBoxNpub.Size = new Size(190, 23);
-            textBoxNpub.TabIndex = 6;
+            textBoxNpub.Size = new Size(171, 23);
+            textBoxNpub.TabIndex = 7;
             // 
             // textBoxCutLength
             // 
             textBoxCutLength.BorderStyle = BorderStyle.FixedSingle;
             textBoxCutLength.ImeMode = ImeMode.Disable;
-            textBoxCutLength.Location = new Point(100, 12);
+            textBoxCutLength.Location = new Point(94, 6);
             textBoxCutLength.MaxLength = 4;
             textBoxCutLength.Name = "textBoxCutLength";
             textBoxCutLength.Size = new Size(26, 23);
-            textBoxCutLength.TabIndex = 1;
+            textBoxCutLength.TabIndex = 2;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(12, 14);
+            label1.Location = new Point(6, 8);
             label1.Name = "label1";
             label1.Size = new Size(82, 15);
             label1.TabIndex = 0;
@@ -86,12 +94,13 @@
             // 
             // trackBarOpacity
             // 
-            trackBarOpacity.Location = new Point(145, 31);
+            trackBarOpacity.BackColor = SystemColors.ButtonFace;
+            trackBarOpacity.Location = new Point(126, 26);
             trackBarOpacity.Maximum = 100;
             trackBarOpacity.Minimum = 20;
             trackBarOpacity.Name = "trackBarOpacity";
-            trackBarOpacity.Size = new Size(127, 45);
-            trackBarOpacity.TabIndex = 2;
+            trackBarOpacity.Size = new Size(118, 45);
+            trackBarOpacity.TabIndex = 3;
             trackBarOpacity.TickFrequency = 20;
             trackBarOpacity.Value = 100;
             trackBarOpacity.Scroll += TrackBarOpacity_Scroll;
@@ -99,17 +108,17 @@
             // checkBoxTopMost
             // 
             checkBoxTopMost.AutoSize = true;
-            checkBoxTopMost.Location = new Point(12, 70);
+            checkBoxTopMost.Location = new Point(6, 64);
             checkBoxTopMost.Name = "checkBoxTopMost";
             checkBoxTopMost.Size = new Size(101, 19);
-            checkBoxTopMost.TabIndex = 4;
+            checkBoxTopMost.TabIndex = 5;
             checkBoxTopMost.Text = "Always on top";
             checkBoxTopMost.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(145, 13);
+            label2.Location = new Point(126, 8);
             label2.Name = "label2";
             label2.Size = new Size(48, 15);
             label2.TabIndex = 0;
@@ -118,7 +127,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(12, 122);
+            label3.Location = new Point(6, 116);
             label3.Name = "label3";
             label3.Size = new Size(61, 15);
             label3.TabIndex = 0;
@@ -126,10 +135,10 @@
             // 
             // label5
             // 
-            label5.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            label5.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             label5.AutoSize = true;
             label5.ForeColor = SystemColors.GrayText;
-            label5.Location = new Point(99, 237);
+            label5.Location = new Point(71, 189);
             label5.Name = "label5";
             label5.Size = new Size(126, 15);
             label5.TabIndex = 0;
@@ -137,12 +146,12 @@
             // 
             // linkLabelIcons8
             // 
-            linkLabelIcons8.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            linkLabelIcons8.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             linkLabelIcons8.AutoSize = true;
-            linkLabelIcons8.Location = new Point(231, 237);
+            linkLabelIcons8.Location = new Point(203, 189);
             linkLabelIcons8.Name = "linkLabelIcons8";
             linkLabelIcons8.Size = new Size(41, 15);
-            linkLabelIcons8.TabIndex = 11;
+            linkLabelIcons8.TabIndex = 8;
             linkLabelIcons8.TabStop = true;
             linkLabelIcons8.Text = "Icons8";
             linkLabelIcons8.LinkClicked += LinkLabelIcons8_LinkClicked;
@@ -159,15 +168,15 @@
             // 
             labelVersion.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             labelVersion.AutoSize = true;
-            labelVersion.Location = new Point(12, 237);
+            labelVersion.Location = new Point(6, 189);
             labelVersion.Name = "labelVersion";
             labelVersion.Size = new Size(37, 15);
             labelVersion.TabIndex = 0;
-            labelVersion.Text = "v0.1.7";
+            labelVersion.Text = "v0.2.0";
             // 
             // labelOpacity
             // 
-            labelOpacity.Location = new Point(231, 13);
+            labelOpacity.Location = new Point(203, 8);
             labelOpacity.Name = "labelOpacity";
             labelOpacity.Size = new Size(41, 15);
             labelOpacity.TabIndex = 0;
@@ -177,17 +186,17 @@
             // checkBoxShowOnlyFollowees
             // 
             checkBoxShowOnlyFollowees.AutoSize = true;
-            checkBoxShowOnlyFollowees.Location = new Point(12, 95);
+            checkBoxShowOnlyFollowees.Location = new Point(6, 89);
             checkBoxShowOnlyFollowees.Name = "checkBoxShowOnlyFollowees";
             checkBoxShowOnlyFollowees.Size = new Size(134, 19);
-            checkBoxShowOnlyFollowees.TabIndex = 5;
+            checkBoxShowOnlyFollowees.TabIndex = 6;
             checkBoxShowOnlyFollowees.Text = "Show only followees";
             checkBoxShowOnlyFollowees.UseVisualStyleBackColor = true;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(12, 43);
+            label4.Location = new Point(6, 37);
             label4.Name = "label4";
             label4.Size = new Size(70, 15);
             label4.TabIndex = 0;
@@ -197,94 +206,148 @@
             // 
             textBoxCutNameLength.BorderStyle = BorderStyle.FixedSingle;
             textBoxCutNameLength.ImeMode = ImeMode.Disable;
-            textBoxCutNameLength.Location = new Point(100, 41);
+            textBoxCutNameLength.Location = new Point(94, 35);
             textBoxCutNameLength.MaxLength = 4;
             textBoxCutNameLength.Name = "textBoxCutNameLength";
             textBoxCutNameLength.Size = new Size(26, 23);
-            textBoxCutNameLength.TabIndex = 3;
+            textBoxCutNameLength.TabIndex = 4;
             // 
             // comboBoxGhosts
             // 
+            comboBoxGhosts.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             comboBoxGhosts.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxGhosts.FormattingEnabled = true;
-            comboBoxGhosts.Location = new Point(82, 149);
+            comboBoxGhosts.Location = new Point(79, 6);
             comboBoxGhosts.Name = "comboBoxGhosts";
-            comboBoxGhosts.Size = new Size(138, 23);
-            comboBoxGhosts.TabIndex = 7;
-            // 
-            // textBoxPreferredGhost
-            // 
-            textBoxPreferredGhost.BorderStyle = BorderStyle.FixedSingle;
-            textBoxPreferredGhost.Location = new Point(82, 178);
-            textBoxPreferredGhost.Name = "textBoxPreferredGhost";
-            textBoxPreferredGhost.ReadOnly = true;
-            textBoxPreferredGhost.Size = new Size(138, 23);
-            textBoxPreferredGhost.TabIndex = 9;
-            // 
-            // buttonPrefer
-            // 
-            buttonPrefer.Location = new Point(226, 149);
-            buttonPrefer.Name = "buttonPrefer";
-            buttonPrefer.Size = new Size(46, 23);
-            buttonPrefer.TabIndex = 8;
-            buttonPrefer.Text = "Prefer";
-            buttonPrefer.UseVisualStyleBackColor = true;
-            buttonPrefer.Click += ButtonPrefer_Click;
-            // 
-            // buttonClear
-            // 
-            buttonClear.Location = new Point(226, 178);
-            buttonClear.Name = "buttonClear";
-            buttonClear.Size = new Size(46, 23);
-            buttonClear.TabIndex = 10;
-            buttonClear.Text = "Clear";
-            buttonClear.UseVisualStyleBackColor = true;
-            buttonClear.Click += ButtonClear_Click;
+            comboBoxGhosts.Size = new Size(136, 23);
+            comboBoxGhosts.TabIndex = 9;
+            comboBoxGhosts.SelectionChangeCommitted += comboBoxGhosts_SelectionChangeCommitted;
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(12, 152);
+            label7.Location = new Point(6, 9);
             label7.Name = "label7";
-            label7.Size = new Size(64, 15);
+            label7.Size = new Size(67, 15);
             label7.TabIndex = 0;
-            label7.Text = "SSP ghosts";
+            label7.Text = "Main ghost";
             // 
-            // label8
+            // checkBoxSoleGhostsOnly
             // 
-            label8.AutoSize = true;
-            label8.Location = new Point(12, 182);
-            label8.Name = "label8";
-            label8.Size = new Size(55, 15);
-            label8.TabIndex = 0;
-            label8.Text = "Preferred";
+            checkBoxSoleGhostsOnly.AutoSize = true;
+            checkBoxSoleGhostsOnly.Location = new Point(6, 35);
+            checkBoxSoleGhostsOnly.Name = "checkBoxSoleGhostsOnly";
+            checkBoxSoleGhostsOnly.Size = new Size(190, 19);
+            checkBoxSoleGhostsOnly.TabIndex = 11;
+            checkBoxSoleGhostsOnly.Text = "Send DSSTP to sole ghosts only";
+            checkBoxSoleGhostsOnly.UseVisualStyleBackColor = true;
+            // 
+            // tabControlSettings
+            // 
+            tabControlSettings.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            tabControlSettings.Controls.Add(tabPage1);
+            tabControlSettings.Controls.Add(tabPage2);
+            tabControlSettings.Location = new Point(12, 12);
+            tabControlSettings.Name = "tabControlSettings";
+            tabControlSettings.SelectedIndex = 0;
+            tabControlSettings.Size = new Size(260, 237);
+            tabControlSettings.TabIndex = 1;
+            tabControlSettings.SelectedIndexChanged += TabControlSettings_SelectedIndexChanged;
+            // 
+            // tabPage1
+            // 
+            tabPage1.BorderStyle = BorderStyle.FixedSingle;
+            tabPage1.Controls.Add(label1);
+            tabPage1.Controls.Add(textBoxCutLength);
+            tabPage1.Controls.Add(label4);
+            tabPage1.Controls.Add(textBoxCutNameLength);
+            tabPage1.Controls.Add(checkBoxTopMost);
+            tabPage1.Controls.Add(checkBoxShowOnlyFollowees);
+            tabPage1.Controls.Add(trackBarOpacity);
+            tabPage1.Controls.Add(label2);
+            tabPage1.Controls.Add(labelOpacity);
+            tabPage1.Controls.Add(labelVersion);
+            tabPage1.Controls.Add(linkLabelIcons8);
+            tabPage1.Controls.Add(textBoxNpub);
+            tabPage1.Controls.Add(label5);
+            tabPage1.Controls.Add(label3);
+            tabPage1.Location = new Point(4, 24);
+            tabPage1.Name = "tabPage1";
+            tabPage1.Padding = new Padding(3);
+            tabPage1.Size = new Size(252, 209);
+            tabPage1.TabIndex = 0;
+            tabPage1.Text = "General";
+            // 
+            // tabPage2
+            // 
+            tabPage2.BorderStyle = BorderStyle.FixedSingle;
+            tabPage2.Controls.Add(buttonReload);
+            tabPage2.Controls.Add(buttonSave);
+            tabPage2.Controls.Add(buttonDelete);
+            tabPage2.Controls.Add(dataGridViewSoloGhosts);
+            tabPage2.Controls.Add(label7);
+            tabPage2.Controls.Add(comboBoxGhosts);
+            tabPage2.Controls.Add(checkBoxSoleGhostsOnly);
+            tabPage2.Location = new Point(4, 24);
+            tabPage2.Name = "tabPage2";
+            tabPage2.Padding = new Padding(3);
+            tabPage2.Size = new Size(252, 209);
+            tabPage2.TabIndex = 1;
+            tabPage2.Text = "SSP ghosts";
+            // 
+            // buttonReload
+            // 
+            buttonReload.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonReload.Image = Properties.Resources.icons8_reload_16;
+            buttonReload.Location = new Point(221, 6);
+            buttonReload.Name = "buttonReload";
+            buttonReload.Size = new Size(23, 23);
+            buttonReload.TabIndex = 10;
+            buttonReload.UseVisualStyleBackColor = true;
+            buttonReload.Click += buttonReload_Click;
+            // 
+            // buttonSave
+            // 
+            buttonSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            buttonSave.Location = new Point(169, 178);
+            buttonSave.Name = "buttonSave";
+            buttonSave.Size = new Size(75, 23);
+            buttonSave.TabIndex = 14;
+            buttonSave.Text = "Save";
+            buttonSave.UseVisualStyleBackColor = true;
+            buttonSave.Click += ButtonSave_Click;
+            // 
+            // buttonDelete
+            // 
+            buttonDelete.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            buttonDelete.Location = new Point(6, 178);
+            buttonDelete.Name = "buttonDelete";
+            buttonDelete.Size = new Size(75, 23);
+            buttonDelete.TabIndex = 13;
+            buttonDelete.Text = "Delete";
+            buttonDelete.UseVisualStyleBackColor = true;
+            buttonDelete.Click += ButtonDelete_Click;
+            // 
+            // dataGridViewSoloGhosts
+            // 
+            dataGridViewSoloGhosts.AllowUserToResizeRows = false;
+            dataGridViewSoloGhosts.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dataGridViewSoloGhosts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewSoloGhosts.Location = new Point(6, 60);
+            dataGridViewSoloGhosts.MultiSelect = false;
+            dataGridViewSoloGhosts.Name = "dataGridViewSoloGhosts";
+            dataGridViewSoloGhosts.RowHeadersVisible = false;
+            dataGridViewSoloGhosts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridViewSoloGhosts.Size = new Size(238, 112);
+            dataGridViewSoloGhosts.TabIndex = 12;
             // 
             // FormSetting
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(284, 261);
-            Controls.Add(label8);
-            Controls.Add(label7);
-            Controls.Add(buttonClear);
-            Controls.Add(buttonPrefer);
-            Controls.Add(textBoxPreferredGhost);
-            Controls.Add(comboBoxGhosts);
-            Controls.Add(label4);
-            Controls.Add(textBoxCutNameLength);
-            Controls.Add(checkBoxShowOnlyFollowees);
-            Controls.Add(labelOpacity);
-            Controls.Add(labelVersion);
+            Controls.Add(tabControlSettings);
             Controls.Add(label6);
-            Controls.Add(linkLabelIcons8);
-            Controls.Add(label5);
-            Controls.Add(label3);
-            Controls.Add(label2);
-            Controls.Add(checkBoxTopMost);
-            Controls.Add(trackBarOpacity);
-            Controls.Add(label1);
-            Controls.Add(textBoxCutLength);
-            Controls.Add(textBoxNpub);
             Icon = (Icon)resources.GetObject("$this.Icon");
             KeyPreview = true;
             MaximizeBox = false;
@@ -297,8 +360,15 @@
             Text = "Setting";
             TopMost = true;
             Load += FormSetting_Load;
+            Shown += FormSetting_Shown;
             KeyDown += FormSetting_KeyDown;
             ((System.ComponentModel.ISupportInitialize)trackBarOpacity).EndInit();
+            tabControlSettings.ResumeLayout(false);
+            tabPage1.ResumeLayout(false);
+            tabPage1.PerformLayout();
+            tabPage2.ResumeLayout(false);
+            tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewSoloGhosts).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -321,10 +391,14 @@
         private Label label4;
         internal TextBox textBoxCutNameLength;
         private ComboBox comboBoxGhosts;
-        private Button buttonPrefer;
-        private Button buttonClear;
         private Label label7;
-        private Label label8;
-        internal TextBox textBoxPreferredGhost;
+        internal CheckBox checkBoxSoleGhostsOnly;
+        private TabControl tabControlSettings;
+        private TabPage tabPage1;
+        private TabPage tabPage2;
+        private DataGridView dataGridViewSoloGhosts;
+        private Button buttonDelete;
+        private Button buttonSave;
+        private Button buttonReload;
     }
 }

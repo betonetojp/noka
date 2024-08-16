@@ -37,12 +37,21 @@ namespace noka
         public string? Url { get; set; }
     }
 
+    public class SoleGhost
+    {
+        [JsonPropertyName("npub")]
+        public string? Npub { get; set; }
+        [JsonPropertyName("ghost_name")]
+        public string? GhostName { get; set; }
+    }
+
     public static class Tools
     {
         //private static readonly string _usersJsonPath = Path.Combine(GetAppPath(), "users.json");
         private static readonly string _usersJsonPath = Path.Combine(Application.StartupPath, "users.json");
         //private static readonly string _relaysJsonPath = Path.Combine(GetAppPath(), "relays.json");
         private static readonly string _relaysJsonPath = Path.Combine(Application.StartupPath, "relays.json");
+        private static readonly string _soleghostsJsonPath = Path.Combine(Application.StartupPath, "soleghosts.json");
 
         //public static string GetAppPath() // DLLから呼ばれた場合、DLLのパスになってしまうので注意
         //{
@@ -236,6 +245,44 @@ namespace noka
                 if (null != relays)
                 {
                     return relays;
+                }
+                return [];
+            }
+            catch (JsonException e)
+            {
+                Debug.WriteLine(e.Message);
+                return [];
+            }
+        }
+
+        public static void SaveSoleGhosts(List<SoleGhost> soleGhosts)
+        {
+            // soleghosts.jsonに保存
+            try
+            {
+                var jsonContent = JsonSerializer.Serialize(soleGhosts, GetOption());
+                File.WriteAllText(_soleghostsJsonPath, jsonContent);
+            }
+            catch (JsonException e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+        }
+
+        public static List<SoleGhost> LoadSoleGhosts()
+        {
+            // soleghosts.jsonを読み込み
+            if (!File.Exists(_soleghostsJsonPath))
+            {
+                return [];
+            }
+            try
+            {
+                var jsonContent = File.ReadAllText(_soleghostsJsonPath);
+                var soleGhosts = JsonSerializer.Deserialize<List<SoleGhost>>(jsonContent, GetOption());
+                if (null != soleGhosts)
+                {
+                    return soleGhosts;
                 }
                 return [];
             }
