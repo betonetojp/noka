@@ -228,7 +228,6 @@ namespace noka
             List<Relay> defaultRelays = [
                 new Relay { Enabled = true, Url = "wss://yabu.me/" },
                 new Relay { Enabled = true, Url = "wss://r.kojira.io/" },
-                new Relay { Enabled = false, Url = "wss://bostr.nokotaro.com" },
                 new Relay { Enabled = false, Url = "wss://nos.lol/" },
                 new Relay { Enabled = false, Url = "wss://relay.damus.io/" },
                 ];

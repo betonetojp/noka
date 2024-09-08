@@ -98,6 +98,7 @@ namespace noka
             {
                 Opacity = 1;
             }
+            _tempOpacity = Opacity;
             _showOnlyFollowees = Setting.ShowOnlyFollowees;
             _ghostName = Setting.Ghost;
             _soleGhostsOnly = Setting.SoleGhostsOnly;
@@ -511,6 +512,7 @@ namespace noka
         private async void ButtonSetting_Click(object sender, EventArgs e)
         {
             // ŠJ‚­‘O
+            Opacity = _tempOpacity;
             _formSetting.checkBoxTopMost.Checked = TopMost;
             _formSetting.textBoxCutLength.Text = _cutLength.ToString();
             _formSetting.textBoxCutNameLength.Text = _cutNameLength.ToString();
@@ -543,6 +545,7 @@ namespace noka
             }
             Opacity = _formSetting.trackBarOpacity.Value / 100.0;
             _showOnlyFollowees = _formSetting.checkBoxShowOnlyFollowees.Checked;
+            _tempOpacity = Opacity;
             _ghostName = _formSetting._mainGhost;
             _npub = _formSetting.textBoxNpub.Text;
             _soleGhostsOnly = _formSetting.checkBoxSoleGhostsOnly.Checked;

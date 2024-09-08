@@ -110,6 +110,7 @@
             labelRelays.Size = new Size(164, 15);
             labelRelays.TabIndex = 0;
             labelRelays.Text = "Relay info";
+            labelRelays.MouseClick += FormMain_MouseClick;
             // 
             // FormMain
             // 

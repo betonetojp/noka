@@ -247,12 +247,14 @@
             Controls.Add(buttonSave);
             Controls.Add(dataGridViewUsers);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            KeyPreview = true;
             MinimumSize = new Size(480, 480);
             Name = "FormManiacs";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Mute and keyword notification";
             FormClosing += FormManiacs_FormClosing;
             Load += FormManiacs_Load;
+            KeyDown += FormManiacs_KeyDown;
             ((System.ComponentModel.ISupportInitialize)dataGridViewUsers).EndInit();
             ResumeLayout(false);
             PerformLayout();
