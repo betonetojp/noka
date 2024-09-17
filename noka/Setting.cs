@@ -24,6 +24,7 @@ namespace noka
             public bool ShowOnlyFollowees { get; set; } = false;
             public string Ghost { get; set; } = string.Empty;
             public string Npub { get; set; } = string.Empty;
+            public string DefaultPicture { get; set; } = "https://robohash.org/{npub}?set=set4&size=128x128";
             public bool SoleGhostsOnly { get; set; } = false;
         }
         #endregion
@@ -126,6 +127,17 @@ namespace noka
             set
             {
                 _data.Npub = value;
+            }
+        }
+        public static string DefaultPicture
+        {
+            get
+            {
+                return _data.DefaultPicture;
+            }
+            set
+            {
+                _data.DefaultPicture = value;
             }
         }
         public static bool SoleGhostsOnly

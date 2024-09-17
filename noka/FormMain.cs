@@ -1,7 +1,9 @@
+using NBitcoin.Secp256k1;
 using NNostr.Client;
 using NNostr.Client.Protocols;
 using SSTPLib;
 using System.Diagnostics;
+using static System.Net.WebRequestMethods;
 
 namespace noka
 {
@@ -18,6 +20,7 @@ namespace noka
 
         private string _npub = string.Empty;
         private string _npubHex = string.Empty;
+        private string _defaultPicture = string.Empty;
 
         /// <summary>
         /// フォロイー公開鍵のハッシュセット
@@ -103,6 +106,7 @@ namespace noka
             _ghostName = Setting.Ghost;
             _soleGhostsOnly = Setting.SoleGhostsOnly;
             _npub = Setting.Npub;
+            _defaultPicture = Setting.DefaultPicture;
             try
             {
                 _npubHex = _npub.ConvertToHex();
@@ -257,13 +261,16 @@ namespace noka
                                     var nevent = nostrEventNote.ToNIP19();
                                     //SearchGhost();
                                     _ds.Update();
+
+                                    var defaultPicture = _defaultPicture.Replace("{pubkey}", nostrEvent.PublicKey)
+                                                                    .Replace("{npub}", nostrEvent.PublicKey.ConvertToNpub());
                                     Dictionary<string, string> SSTPHeader = new(_baseSSTPHeader)
                                     {
                                         { "Reference1", $"{nostrEvent.Kind}" }, // kind
                                         { "Reference2", content }, // content
                                         { "Reference3", user?.Name ?? "???" }, // name
                                         { "Reference4", user?.DisplayName ?? string.Empty }, // display_name
-                                        { "Reference5", user?.Picture ?? string.Empty }, // picture
+                                        { "Reference5", string.IsNullOrEmpty(user?.Picture) ? defaultPicture : user?.Picture ?? defaultPicture }, // picture
                                         { "Reference6", nevent }, // nevent1...
                                         { "Reference7", nostrEvent.PublicKey.ConvertToNpub() }, // npub1...
                                         { "Script", $"{speaker}リアクション {userName}\\n{content}\\e" }
@@ -343,13 +350,15 @@ namespace noka
                                 {
                                     msg = $"{msg[.._cutLength]}...";
                                 }
+                                var defaultPicture = _defaultPicture.Replace("{pubkey}", nostrEvent.PublicKey)
+                                                                    .Replace("{npub}", nostrEvent.PublicKey.ConvertToNpub());
                                 Dictionary<string, string> SSTPHeader = new(_baseSSTPHeader)
                                 {
                                     { "Reference1", $"{nostrEvent.Kind}" },
                                     { "Reference2", content }, // content
                                     { "Reference3", user?.Name ?? "???" }, // name
                                     { "Reference4", user?.DisplayName ?? string.Empty }, // display_name
-                                    { "Reference5", user?.Picture ?? string.Empty }, // picture
+                                    { "Reference5", string.IsNullOrEmpty(user?.Picture) ? defaultPicture : user?.Picture ?? defaultPicture }, // picture
                                     { "Reference6", nevent }, // nevent1...
                                     { "Reference7", nostrEvent.PublicKey.ConvertToNpub() }, // npub1...
                                     { "Script", $"{speaker}{(isSole ? "" : userName)}\\n{msg}\\e" }
@@ -519,6 +528,7 @@ namespace noka
             _formSetting.trackBarOpacity.Value = (int)(Opacity * 100);
             _formSetting.checkBoxShowOnlyFollowees.Checked = _showOnlyFollowees;
             _formSetting.textBoxNpub.Text = _npub;
+            _formSetting.textBoxDefaultPicture.Text = _defaultPicture;
             _formSetting._mainGhost = _ghostName;
             _formSetting.checkBoxSoleGhostsOnly.Checked = _soleGhostsOnly;
 
@@ -548,6 +558,7 @@ namespace noka
             _tempOpacity = Opacity;
             _ghostName = _formSetting._mainGhost;
             _npub = _formSetting.textBoxNpub.Text;
+            _defaultPicture = _formSetting.textBoxDefaultPicture.Text;
             _soleGhostsOnly = _formSetting.checkBoxSoleGhostsOnly.Checked;
             try
             {
@@ -590,6 +601,7 @@ namespace noka
             Setting.Ghost = _ghostName;
             Setting.SoleGhostsOnly = _soleGhostsOnly;
             Setting.Npub = _npub;
+            Setting.DefaultPicture = _defaultPicture;
 
             Setting.Save(_configPath);
 

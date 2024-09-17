@@ -33,6 +33,11 @@ https://github.com/nikolat/nokauka
 
 ◆ 更新履歴
 
+2024/09/18 v0.3.0
+pictureが設定されていないユーザーのアイコンを指定できるようにしました。
+デフォルトはnostterと同じネコちゃんのRoboHashです。
+URLテキスト内の{pubkey}と{npub}をそれぞれ発言ユーザーのpubkeyとnpubに置換します。
+
 2024/09/09 v0.2.1
 UI動作を改善しました。
 
