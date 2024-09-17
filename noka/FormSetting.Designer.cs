@@ -49,6 +49,8 @@
             checkBoxSoleGhostsOnly = new CheckBox();
             tabControlSettings = new TabControl();
             tabPage1 = new TabPage();
+            textBoxDefaultPicture = new TextBox();
+            label8 = new Label();
             tabPage2 = new TabPage();
             buttonReload = new Button();
             buttonSave = new Button();
@@ -172,7 +174,7 @@
             labelVersion.Name = "labelVersion";
             labelVersion.Size = new Size(37, 15);
             labelVersion.TabIndex = 0;
-            labelVersion.Text = "v0.2.1";
+            labelVersion.Text = "v0.3.0";
             // 
             // labelOpacity
             // 
@@ -268,8 +270,10 @@
             tabPage1.Controls.Add(labelOpacity);
             tabPage1.Controls.Add(labelVersion);
             tabPage1.Controls.Add(linkLabelIcons8);
+            tabPage1.Controls.Add(textBoxDefaultPicture);
             tabPage1.Controls.Add(textBoxNpub);
             tabPage1.Controls.Add(label5);
+            tabPage1.Controls.Add(label8);
             tabPage1.Controls.Add(label3);
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
@@ -277,6 +281,27 @@
             tabPage1.Size = new Size(252, 209);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "General";
+            // 
+            // textBoxDefaultPicture
+            // 
+            textBoxDefaultPicture.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            textBoxDefaultPicture.BorderStyle = BorderStyle.FixedSingle;
+            textBoxDefaultPicture.ImeMode = ImeMode.Disable;
+            textBoxDefaultPicture.Location = new Point(73, 143);
+            textBoxDefaultPicture.MaxLength = 136;
+            textBoxDefaultPicture.Name = "textBoxDefaultPicture";
+            textBoxDefaultPicture.Size = new Size(171, 23);
+            textBoxDefaultPicture.TabIndex = 7;
+            textBoxDefaultPicture.Text = "https://robohash.org/{npub}?set=set4&size=128x128";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(6, 145);
+            label8.Name = "label8";
+            label8.Size = new Size(66, 15);
+            label8.TabIndex = 0;
+            label8.Text = "default pic.";
             // 
             // tabPage2
             // 
@@ -400,5 +425,7 @@
         private Button buttonDelete;
         private Button buttonSave;
         private Button buttonReload;
+        internal TextBox textBoxDefaultPicture;
+        private Label label8;
     }
 }
