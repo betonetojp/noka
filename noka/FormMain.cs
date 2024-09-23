@@ -1,9 +1,7 @@
-using NBitcoin.Secp256k1;
 using NNostr.Client;
 using NNostr.Client.Protocols;
 using SSTPLib;
 using System.Diagnostics;
-using static System.Net.WebRequestMethods;
 
 namespace noka
 {

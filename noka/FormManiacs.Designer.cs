@@ -152,9 +152,9 @@
             checkBoxOpenFile.AutoSize = true;
             checkBoxOpenFile.Location = new Point(170, 381);
             checkBoxOpenFile.Name = "checkBoxOpenFile";
-            checkBoxOpenFile.Size = new Size(136, 19);
+            checkBoxOpenFile.Size = new Size(142, 19);
             checkBoxOpenFile.TabIndex = 7;
-            checkBoxOpenFile.Text = "Open file notification";
+            checkBoxOpenFile.Text = "Open URL notification";
             checkBoxOpenFile.UseVisualStyleBackColor = true;
             // 
             // labelFileName
@@ -163,19 +163,19 @@
             labelFileName.AutoSize = true;
             labelFileName.Location = new Point(170, 410);
             labelFileName.Name = "labelFileName";
-            labelFileName.Size = new Size(57, 15);
+            labelFileName.Size = new Size(28, 15);
             labelFileName.TabIndex = 0;
-            labelFileName.Text = "File name";
+            labelFileName.Text = "URL";
             // 
             // textBoxFileName
             // 
             textBoxFileName.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             textBoxFileName.BorderStyle = BorderStyle.FixedSingle;
-            textBoxFileName.Location = new Point(233, 406);
+            textBoxFileName.Location = new Point(204, 406);
             textBoxFileName.Name = "textBoxFileName";
-            textBoxFileName.Size = new Size(126, 23);
+            textBoxFileName.Size = new Size(155, 23);
             textBoxFileName.TabIndex = 8;
-            textBoxFileName.Text = "https://nostter.app/";
+            textBoxFileName.Text = "https://lumilumi.vercel.app/";
             // 
             // textBoxKeywords
             // 

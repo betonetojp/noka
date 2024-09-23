@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSetting));
             textBoxNpub = new TextBox();
             textBoxCutLength = new TextBox();
@@ -49,9 +50,9 @@
             checkBoxSoleGhostsOnly = new CheckBox();
             tabControlSettings = new TabControl();
             tabPage1 = new TabPage();
-            textBoxDefaultPicture = new TextBox();
-            label8 = new Label();
             tabPage2 = new TabPage();
+            label8 = new Label();
+            textBoxDefaultPicture = new TextBox();
             buttonReload = new Button();
             buttonSave = new Button();
             buttonDelete = new Button();
@@ -153,7 +154,7 @@
             linkLabelIcons8.Location = new Point(203, 189);
             linkLabelIcons8.Name = "linkLabelIcons8";
             linkLabelIcons8.Size = new Size(41, 15);
-            linkLabelIcons8.TabIndex = 9;
+            linkLabelIcons8.TabIndex = 8;
             linkLabelIcons8.TabStop = true;
             linkLabelIcons8.Text = "Icons8";
             linkLabelIcons8.LinkClicked += LinkLabelIcons8_LinkClicked;
@@ -174,7 +175,7 @@
             labelVersion.Name = "labelVersion";
             labelVersion.Size = new Size(37, 15);
             labelVersion.TabIndex = 0;
-            labelVersion.Text = "v0.3.0";
+            labelVersion.Text = "v0.3.1";
             // 
             // labelOpacity
             // 
@@ -219,16 +220,16 @@
             comboBoxGhosts.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             comboBoxGhosts.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxGhosts.FormattingEnabled = true;
-            comboBoxGhosts.Location = new Point(79, 6);
+            comboBoxGhosts.Location = new Point(79, 35);
             comboBoxGhosts.Name = "comboBoxGhosts";
             comboBoxGhosts.Size = new Size(136, 23);
-            comboBoxGhosts.TabIndex = 9;
+            comboBoxGhosts.TabIndex = 10;
             comboBoxGhosts.SelectionChangeCommitted += comboBoxGhosts_SelectionChangeCommitted;
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(6, 9);
+            label7.Location = new Point(6, 38);
             label7.Name = "label7";
             label7.Size = new Size(67, 15);
             label7.TabIndex = 0;
@@ -237,10 +238,10 @@
             // checkBoxSoleGhostsOnly
             // 
             checkBoxSoleGhostsOnly.AutoSize = true;
-            checkBoxSoleGhostsOnly.Location = new Point(6, 35);
+            checkBoxSoleGhostsOnly.Location = new Point(6, 64);
             checkBoxSoleGhostsOnly.Name = "checkBoxSoleGhostsOnly";
             checkBoxSoleGhostsOnly.Size = new Size(190, 19);
-            checkBoxSoleGhostsOnly.TabIndex = 11;
+            checkBoxSoleGhostsOnly.TabIndex = 12;
             checkBoxSoleGhostsOnly.Text = "Send DSSTP to sole ghosts only";
             checkBoxSoleGhostsOnly.UseVisualStyleBackColor = true;
             // 
@@ -270,10 +271,8 @@
             tabPage1.Controls.Add(labelOpacity);
             tabPage1.Controls.Add(labelVersion);
             tabPage1.Controls.Add(linkLabelIcons8);
-            tabPage1.Controls.Add(textBoxDefaultPicture);
             tabPage1.Controls.Add(textBoxNpub);
             tabPage1.Controls.Add(label5);
-            tabPage1.Controls.Add(label8);
             tabPage1.Controls.Add(label3);
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
@@ -282,30 +281,11 @@
             tabPage1.TabIndex = 0;
             tabPage1.Text = "General";
             // 
-            // textBoxDefaultPicture
-            // 
-            textBoxDefaultPicture.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            textBoxDefaultPicture.BorderStyle = BorderStyle.FixedSingle;
-            textBoxDefaultPicture.ImeMode = ImeMode.Disable;
-            textBoxDefaultPicture.Location = new Point(73, 143);
-            textBoxDefaultPicture.MaxLength = 136;
-            textBoxDefaultPicture.Name = "textBoxDefaultPicture";
-            textBoxDefaultPicture.Size = new Size(171, 23);
-            textBoxDefaultPicture.TabIndex = 8;
-            textBoxDefaultPicture.Text = "https://robohash.org/{npub}?set=set4&size=128x128";
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Location = new Point(6, 145);
-            label8.Name = "label8";
-            label8.Size = new Size(66, 15);
-            label8.TabIndex = 0;
-            label8.Text = "default pic.";
-            // 
             // tabPage2
             // 
             tabPage2.BorderStyle = BorderStyle.FixedSingle;
+            tabPage2.Controls.Add(label8);
+            tabPage2.Controls.Add(textBoxDefaultPicture);
             tabPage2.Controls.Add(buttonReload);
             tabPage2.Controls.Add(buttonSave);
             tabPage2.Controls.Add(buttonDelete);
@@ -320,14 +300,35 @@
             tabPage2.TabIndex = 1;
             tabPage2.Text = "SSP ghosts";
             // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(6, 8);
+            label8.Name = "label8";
+            label8.Size = new Size(67, 15);
+            label8.TabIndex = 0;
+            label8.Text = "Default pic.";
+            // 
+            // textBoxDefaultPicture
+            // 
+            textBoxDefaultPicture.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            textBoxDefaultPicture.BorderStyle = BorderStyle.FixedSingle;
+            textBoxDefaultPicture.ImeMode = ImeMode.Disable;
+            textBoxDefaultPicture.Location = new Point(79, 6);
+            textBoxDefaultPicture.MaxLength = 136;
+            textBoxDefaultPicture.Name = "textBoxDefaultPicture";
+            textBoxDefaultPicture.Size = new Size(165, 23);
+            textBoxDefaultPicture.TabIndex = 9;
+            textBoxDefaultPicture.Text = "https://robohash.org/{npub}?set=set4&size=128x128";
+            // 
             // buttonReload
             // 
             buttonReload.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             buttonReload.Image = Properties.Resources.icons8_reload_16;
-            buttonReload.Location = new Point(221, 6);
+            buttonReload.Location = new Point(221, 35);
             buttonReload.Name = "buttonReload";
             buttonReload.Size = new Size(23, 23);
-            buttonReload.TabIndex = 10;
+            buttonReload.TabIndex = 11;
             buttonReload.UseVisualStyleBackColor = true;
             buttonReload.Click += buttonReload_Click;
             // 
@@ -337,7 +338,7 @@
             buttonSave.Location = new Point(169, 178);
             buttonSave.Name = "buttonSave";
             buttonSave.Size = new Size(75, 23);
-            buttonSave.TabIndex = 14;
+            buttonSave.TabIndex = 15;
             buttonSave.Text = "Save";
             buttonSave.UseVisualStyleBackColor = true;
             buttonSave.Click += ButtonSave_Click;
@@ -348,7 +349,7 @@
             buttonDelete.Location = new Point(6, 178);
             buttonDelete.Name = "buttonDelete";
             buttonDelete.Size = new Size(75, 23);
-            buttonDelete.TabIndex = 13;
+            buttonDelete.TabIndex = 14;
             buttonDelete.Text = "Delete";
             buttonDelete.UseVisualStyleBackColor = true;
             buttonDelete.Click += ButtonDelete_Click;
@@ -357,14 +358,22 @@
             // 
             dataGridViewSoloGhosts.AllowUserToResizeRows = false;
             dataGridViewSoloGhosts.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Yu Gothic UI", 9F);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dataGridViewSoloGhosts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dataGridViewSoloGhosts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewSoloGhosts.Location = new Point(6, 60);
+            dataGridViewSoloGhosts.Location = new Point(6, 89);
             dataGridViewSoloGhosts.MultiSelect = false;
             dataGridViewSoloGhosts.Name = "dataGridViewSoloGhosts";
             dataGridViewSoloGhosts.RowHeadersVisible = false;
             dataGridViewSoloGhosts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridViewSoloGhosts.Size = new Size(238, 112);
-            dataGridViewSoloGhosts.TabIndex = 12;
+            dataGridViewSoloGhosts.Size = new Size(238, 83);
+            dataGridViewSoloGhosts.TabIndex = 13;
             // 
             // FormSetting
             // 
@@ -425,7 +434,7 @@
         private Button buttonDelete;
         private Button buttonSave;
         private Button buttonReload;
-        internal TextBox textBoxDefaultPicture;
         private Label label8;
+        internal TextBox textBoxDefaultPicture;
     }
 }

@@ -24,7 +24,7 @@ namespace noka
 
         private List<string> _keywords = [];
         private bool _shouldOpenFile = false;
-        private string _fileName = "https://njump.me/";
+        private string _fileName = "https://lumilumi.vercel.app/";
         private bool _muteMostr = false;
 
         //private readonly string _keywordsJsonPath = Path.Combine(Tools.GetAppPath(), "keywords.json");

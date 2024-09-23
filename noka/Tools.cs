@@ -2,11 +2,10 @@
 using NNostr.Client;
 using NNostr.Client.JsonConverters;
 using NNostr.Client.Protocols;
+using nokakoi;
 using System.Diagnostics;
-using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Text.Unicode;
 
 namespace noka
 {
@@ -117,7 +116,8 @@ namespace noka
             // ユニコードのレンジ指定で日本語も正しく表示、インデントされるように指定
             var options = new JsonSerializerOptions
             {
-                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                //Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                Encoder = new NoEscapingJsonEncoder(),
                 WriteIndented = true,
             };
             return options;
