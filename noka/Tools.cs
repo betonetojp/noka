@@ -2,7 +2,6 @@
 using NNostr.Client;
 using NNostr.Client.JsonConverters;
 using NNostr.Client.Protocols;
-using nokakoi;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
