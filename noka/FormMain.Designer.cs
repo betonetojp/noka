@@ -41,9 +41,9 @@
             // 
             // buttonStart
             // 
-            buttonStart.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonStart.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             buttonStart.Image = Properties.Resources.icons8_start_16;
-            buttonStart.Location = new Point(211, 12);
+            buttonStart.Location = new Point(211, 246);
             buttonStart.Name = "buttonStart";
             buttonStart.Size = new Size(23, 23);
             buttonStart.TabIndex = 2;
@@ -55,24 +55,24 @@
             textBoxTimeline.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             textBoxTimeline.BackColor = SystemColors.Control;
             textBoxTimeline.BorderStyle = BorderStyle.FixedSingle;
-            textBoxTimeline.Location = new Point(12, 41);
+            textBoxTimeline.Location = new Point(12, 12);
             textBoxTimeline.MaxLength = 0;
             textBoxTimeline.Multiline = true;
             textBoxTimeline.Name = "textBoxTimeline";
             textBoxTimeline.ReadOnly = true;
             textBoxTimeline.ScrollBars = ScrollBars.Vertical;
             textBoxTimeline.Size = new Size(280, 228);
-            textBoxTimeline.TabIndex = 5;
+            textBoxTimeline.TabIndex = 0;
             textBoxTimeline.TabStop = false;
             textBoxTimeline.MouseEnter += TextBoxTimeline_MouseEnter;
             textBoxTimeline.MouseLeave += TextBoxTimeline_MouseLeave;
             // 
             // buttonStop
             // 
-            buttonStop.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonStop.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             buttonStop.Enabled = false;
             buttonStop.Image = Properties.Resources.icons8_stop_16;
-            buttonStop.Location = new Point(240, 12);
+            buttonStop.Location = new Point(240, 246);
             buttonStop.Name = "buttonStop";
             buttonStop.Size = new Size(23, 23);
             buttonStop.TabIndex = 3;
@@ -81,9 +81,9 @@
             // 
             // buttonSetting
             // 
-            buttonSetting.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonSetting.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             buttonSetting.Image = Properties.Resources.icons8_setting_16;
-            buttonSetting.Location = new Point(269, 12);
+            buttonSetting.Location = new Point(269, 246);
             buttonSetting.Name = "buttonSetting";
             buttonSetting.Size = new Size(23, 23);
             buttonSetting.TabIndex = 4;
@@ -92,8 +92,9 @@
             // 
             // buttonRelayList
             // 
+            buttonRelayList.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             buttonRelayList.Image = Properties.Resources.icons8_list_16;
-            buttonRelayList.Location = new Point(12, 12);
+            buttonRelayList.Location = new Point(182, 246);
             buttonRelayList.Name = "buttonRelayList";
             buttonRelayList.Size = new Size(23, 23);
             buttonRelayList.TabIndex = 1;
@@ -102,14 +103,15 @@
             // 
             // labelRelays
             // 
-            labelRelays.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            labelRelays.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             labelRelays.AutoEllipsis = true;
             labelRelays.ForeColor = SystemColors.GrayText;
-            labelRelays.Location = new Point(41, 16);
+            labelRelays.Location = new Point(12, 250);
             labelRelays.Name = "labelRelays";
             labelRelays.Size = new Size(164, 15);
             labelRelays.TabIndex = 0;
             labelRelays.Text = "Relay info";
+            labelRelays.TextAlign = ContentAlignment.TopRight;
             labelRelays.MouseClick += FormMain_MouseClick;
             // 
             // FormMain
