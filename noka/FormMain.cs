@@ -39,7 +39,7 @@ namespace noka
 
         private double _tempOpacity = 1.00;
 
-        private readonly DSSTPSender _ds = new("SakuraUnicode");
+        private static readonly DSSTPSender _ds = new("SakuraUnicode");
         private readonly string _SSTPMethod = "NOTIFY SSTP/1.1";
         private readonly Dictionary<string, string> _baseSSTPHeader = new(){
             {"Charset","UTF-8"},
@@ -196,9 +196,9 @@ namespace noka
         /// <param name="args"></param>
         private void OnClientOnEventsReceived(object? sender, (string subscriptionId, NostrEvent[] events) args)
         {
-            // タイムライン購読
             if (args.subscriptionId == _nostrAccess.SubscriptionId)
             {
+                #region タイムライン購読
                 foreach (var nostrEvent in args.events)
                 {
                     if (RemoveCompletedEventIds(nostrEvent.Id))
@@ -233,9 +233,9 @@ namespace noka
                             speaker = "\\0";
                         }
 
-                        // リアクション
                         if (7 == nostrEvent.Kind)
                         {
+                            #region リアクション
                             // ログイン済みで自分へのリアクション
                             if (!string.IsNullOrEmpty(_npubHex) && nostrEvent.GetTaggedPublicKeys().Contains(_npubHex))
                             {
@@ -280,10 +280,11 @@ namespace noka
                                 // 画面に表示
                                 textBoxTimeline.Text = "+" + timeString + " " + userName + " " + content + Environment.NewLine + textBoxTimeline.Text;
                             }
+                            #endregion
                         }
-                        // テキストノート
                         if (1 == nostrEvent.Kind || 42 == nostrEvent.Kind)
                         {
+                            #region テキストノート
                             if (42 == nostrEvent.Kind)
                             {
                                 headMark = "=";
@@ -417,13 +418,15 @@ namespace noka
                                                  + $"{timeString} {userName}{Environment.NewLine}"
                                                  + " " + content + Environment.NewLine + textBoxTimeline.Text;
                             Debug.WriteLine($"{timeString} {userName} {content}");
+                            #endregion
                         }
                     }
                 }
+                #endregion
             }
-            // フォロイー購読
             else if (args.subscriptionId == _nostrAccess.GetFolloweesSubscriptionId)
             {
+                #region フォロイー購読
                 foreach (var nostrEvent in args.events)
                 {
                     // フォローリスト
@@ -441,10 +444,11 @@ namespace noka
                         }
                     }
                 }
+                #endregion
             }
-            // プロフィール購読
             else if (args.subscriptionId == _nostrAccess.GetProfilesSubscriptionId)
             {
+                #region プロフィール購読
                 foreach (var nostrEvent in args.events)
                 {
                     if (RemoveCompletedEventIds(nostrEvent.Id))
@@ -480,6 +484,7 @@ namespace noka
                         }
                     }
                 }
+                #endregion
             }
         }
         #endregion
@@ -809,9 +814,11 @@ namespace noka
         }
         #endregion
 
+        #region 個別ゴーストリスト更新
         private void RefleshGhosts()
         {
             _soleGhosts = Tools.LoadSoleGhosts();
         }
+        #endregion
     }
 }
