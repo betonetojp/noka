@@ -14,10 +14,12 @@ namespace noka
         public bool Mute { get; set; }
         [JsonPropertyName("last_activity")]
         public DateTime? LastActivity { get; set; }
-        [JsonPropertyName("name")]
-        public string? Name { get; set; }
+        [JsonPropertyName("petname")]
+        public string? PetName { get; set; }
         [JsonPropertyName("display_name")]
         public string? DisplayName { get; set; }
+        [JsonPropertyName("name")]
+        public string? Name { get; set; }
         [JsonPropertyName("nip05")]
         public string? Nip05 { get; set; }
         [JsonPropertyName("picture")]
@@ -60,55 +62,6 @@ namespace noka
         //    }
         //    return appPath;
         //}
-        /// <summary>
-        /// JSONからユーザーを作成
-        /// </summary>
-        /// <param name="contentJson">kind:0のcontent JSON</param>
-        /// <param name="createdAt">kind:0の作成日時</param>
-        /// <returns>ユーザー</returns>
-        public static User? JsonToUser(string contentJson, DateTimeOffset? createdAt, bool shouldMuteMostr = true)
-        {
-            if (string.IsNullOrEmpty(contentJson))
-            {
-                return null;
-            }
-            try
-            {
-                var user = JsonSerializer.Deserialize<User>(contentJson, GetOption());
-                if (null != user)
-                {
-                    user.CreatedAt = createdAt;
-                    if (shouldMuteMostr && null != user.Nip05 && user.Nip05.Contains("mostr"))
-                    {
-                        user.Mute = true;
-                    }
-                }
-                return user;
-            }
-            catch (JsonException e)
-            {
-                Debug.WriteLine(e.Message);
-                return null;
-            }
-        }
-
-        public static Relay? JsonToRelay(string json)
-        {
-            if (string.IsNullOrEmpty(json))
-            {
-                return null;
-            }
-            try
-            {
-                var relay = JsonSerializer.Deserialize<Relay>(json, GetOption());
-                return relay;
-            }
-            catch (JsonException e)
-            {
-                Debug.WriteLine(e.Message);
-                return null;
-            }
-        }
 
         private static JsonSerializerOptions GetOption()
         {
@@ -122,46 +75,7 @@ namespace noka
             return options;
         }
 
-        /// <summary>
-        /// nsecからnpubを取得する
-        /// </summary>
-        /// <param name="nsec">nsec</param>
-        /// <returns>npub</returns>
-        public static string GetNpub(this string nsec)
-        {
-            return nsec.FromNIP19Nsec().CreateXOnlyPubKey().ToNIP19();
-        }
-
-        /// <summary>
-        /// nsecからnpub(HEX)を取得する
-        /// </summary>
-        /// <param name="nsec">nsec</param>
-        /// <returns>npub(HEX)</returns>
-        public static string GetNpubHex(this string nsec)
-        {
-            return nsec.FromNIP19Nsec().CreateXOnlyPubKey().ToHex();
-        }
-
-        /// <summary>
-        /// npubをHEXに変換する
-        /// </summary>
-        /// <param name="npub">npub</param>
-        /// <returns>HEX</returns>
-        public static string ConvertToHex(this string npub)
-        {
-            return npub.FromNIP19Npub().ToHex();
-        }
-
-        /// <summary>
-        /// HEXをnpubに変換する
-        /// </summary>
-        /// <param name="hex">HEX</param>
-        /// <returns>npub</returns>
-        public static string ConvertToNpub(this string hex)
-        {
-            return ECXOnlyPubKey.Create(hex.FromHex()).ToNIP19();
-        }
-
+        #region ユーザー
         /// <summary>
         /// ユーザー辞書をファイルに保存する
         /// </summary>
@@ -208,6 +122,40 @@ namespace noka
             }
         }
 
+        /// <summary>
+        /// JSONからユーザーを作成
+        /// </summary>
+        /// <param name="contentJson">kind:0のcontent JSON</param>
+        /// <param name="createdAt">kind:0の作成日時</param>
+        /// <returns>ユーザー</returns>
+        public static User? JsonToUser(string contentJson, DateTimeOffset? createdAt, bool shouldMuteMostr = true)
+        {
+            if (string.IsNullOrEmpty(contentJson))
+            {
+                return null;
+            }
+            try
+            {
+                var user = JsonSerializer.Deserialize<User>(contentJson, GetOption());
+                if (null != user)
+                {
+                    user.CreatedAt = createdAt;
+                    if (shouldMuteMostr && null != user.Nip05 && user.Nip05.Contains("mostr"))
+                    {
+                        user.Mute = true;
+                    }
+                }
+                return user;
+            }
+            catch (JsonException e)
+            {
+                Debug.WriteLine(e.Message);
+                return null;
+            }
+        }
+        #endregion
+
+        #region リレー
         public static void SaveRelays(List<Relay> relays)
         {
             // relays.jsonに保存
@@ -252,7 +200,26 @@ namespace noka
                 return [];
             }
         }
+        internal static Uri[] GetEnabledRelays()
+        {
+            return GetEnabledRelays(LoadRelays());
+        }
 
+        internal static Uri[] GetEnabledRelays(List<Relay> relays)
+        {
+            List<Uri> enabledRelays = [];
+            foreach (var relay in relays)
+            {
+                if (relay.Enabled && null != relay.Url)
+                {
+                    enabledRelays.Add(new Uri(relay.Url));
+                }
+            }
+            return [.. enabledRelays];
+        }
+        #endregion
+
+        #region 個別ゴースト
         public static void SaveSoleGhosts(List<SoleGhost> soleGhosts)
         {
             // soleghosts.jsonに保存
@@ -290,23 +257,48 @@ namespace noka
                 return [];
             }
         }
+        #endregion
 
-        internal static Uri[] GetEnabledRelays()
+        #region Nostrツール
+        /// <summary>
+        /// nsecからnpubを取得する
+        /// </summary>
+        /// <param name="nsec">nsec</param>
+        /// <returns>npub</returns>
+        public static string GetNpub(this string nsec)
         {
-            return GetEnabledRelays(LoadRelays());
+            return nsec.FromNIP19Nsec().CreateXOnlyPubKey().ToNIP19();
         }
 
-        internal static Uri[] GetEnabledRelays(List<Relay> relays)
+        /// <summary>
+        /// nsecからnpub(HEX)を取得する
+        /// </summary>
+        /// <param name="nsec">nsec</param>
+        /// <returns>npub(HEX)</returns>
+        public static string GetNpubHex(this string nsec)
         {
-            List<Uri> enabledRelays = [];
-            foreach (var relay in relays)
-            {
-                if (relay.Enabled && null != relay.Url)
-                {
-                    enabledRelays.Add(new Uri(relay.Url));
-                }
-            }
-            return [.. enabledRelays];
+            return nsec.FromNIP19Nsec().CreateXOnlyPubKey().ToHex();
         }
+
+        /// <summary>
+        /// npubをHEXに変換する
+        /// </summary>
+        /// <param name="npub">npub</param>
+        /// <returns>HEX</returns>
+        public static string ConvertToHex(this string npub)
+        {
+            return npub.FromNIP19Npub().ToHex();
+        }
+
+        /// <summary>
+        /// HEXをnpubに変換する
+        /// </summary>
+        /// <param name="hex">HEX</param>
+        /// <returns>npub</returns>
+        public static string ConvertToNpub(this string hex)
+        {
+            return ECXOnlyPubKey.Create(hex.FromHex()).ToNIP19();
+        }
+        #endregion
     }
 }
