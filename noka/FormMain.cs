@@ -194,7 +194,7 @@ namespace noka
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        private void OnClientOnEventsReceived(object? sender, (string subscriptionId, NostrEvent[] events) args)
+        private async void OnClientOnEventsReceived(object? sender, (string subscriptionId, NostrEvent[] events) args)
         {
             if (args.subscriptionId == NostrAccess.SubscriptionId)
             {
@@ -239,7 +239,25 @@ namespace noka
                             // ログイン済みで自分へのリアクション
                             if (!string.IsNullOrEmpty(_npubHex) && nostrEvent.GetTaggedPublicKeys().Contains(_npubHex))
                             {
-                                Users.TryGetValue(nostrEvent.PublicKey, out User? user);
+                                // プロフィール購読
+                                NostrAccess.SubscribeProfiles([nostrEvent.PublicKey]);
+
+                                // ユーザー取得
+                                User? user = null;
+                                int retryCount = 0;
+                                while (retryCount < 10)
+                                {
+                                    Users.TryGetValue(nostrEvent.PublicKey, out user);
+                                    // ユーザーが見つかった場合、ループを抜ける
+                                    if (user != null)
+                                    {
+                                        break;
+                                    }
+                                    // 一定時間待機してから再試行
+                                    await Task.Delay(500);
+                                    retryCount++;
+                                }
+
                                 // ユーザー表示名取得
                                 string userName = GetUserName(nostrEvent.PublicKey);
                                 // ユーザー表示名カット
@@ -305,10 +323,32 @@ namespace noka
                                 continue;
                             }
 
-                            Users.TryGetValue(nostrEvent.PublicKey, out User? user);
-                            // ユーザー表示名取得（ユーザー辞書メモリ節約のため↑のフラグ処理後に）
-                            string userName = GetUserName(nostrEvent.PublicKey);
+                            // プロフィール購読
+                            NostrAccess.SubscribeProfiles([nostrEvent.PublicKey]);
 
+                            // ユーザー取得
+                            User? user = null;
+                            int retryCount = 0;
+                            while (retryCount < 10)
+                            {
+                                Debug.WriteLine($"retryCount = {retryCount}");
+                                Users.TryGetValue(nostrEvent.PublicKey, out user);
+                                // ユーザーが見つかった場合、ループを抜ける
+                                if (user != null)
+                                {
+                                    break;
+                                }
+                                // 一定時間待機してから再試行
+                                await Task.Delay(500);
+                                retryCount++;
+                            }
+                            // ユーザーが見つからない時は表示しない
+                            if (null == user)
+                            {
+                                continue;
+                            }
+
+                            // 個別ゴーストチェック
                             bool isSole = false;
                             foreach (SoleGhost soleGhost in _soleGhosts)
                             {
@@ -319,12 +359,8 @@ namespace noka
                                 }
                             }
 
-                            // ユーザーが見つからない時は表示しない
-                            if (null == user)
-                            {
-                                continue;
-                            }
-
+                            // ユーザー表示名取得
+                            string userName = GetUserName(nostrEvent.PublicKey);
                             // ユーザー表示名カット
                             if (userName.Length > _cutNameLength)
                             {
@@ -689,16 +725,6 @@ namespace noka
         /// <returns>ユーザー表示名</returns>
         private string GetUserName(string publicKeyHex)
         {
-            /*
-            // 辞書にない場合プロフィールを購読する
-            if (!_users.TryGetValue(publicKeyHex, out User? user))
-            {
-                SubscribeProfiles([publicKeyHex]);
-            }
-            */
-            // kind 0 を毎回購読するように変更（頻繁にdisplay_name等を変更するユーザーがいるため）
-            NostrAccess.SubscribeProfiles([publicKeyHex]);
-
             // 情報があれば表示名を取得
             Users.TryGetValue(publicKeyHex, out User? user);
             string? userName = "???";
@@ -718,7 +744,7 @@ namespace noka
                 // 取得日更新
                 user.LastActivity = DateTime.Now;
                 Tools.SaveUsers(Users);
-                Debug.WriteLine($"ユーザー名取得 {user.LastActivity} {user.DisplayName} {user.Name}");
+                Debug.WriteLine($"ユーザー名取得: {user.DisplayName} @{user.Name} 📛{user.PetName}");
             }
             return userName;
         }
