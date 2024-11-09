@@ -65,7 +65,7 @@ namespace noka
         /// <returns></returns>
         public static async Task<int> ConnectAsync()
         {
-            if (null == _clients)
+            if (_clients == null)
             {
                 _relays = Tools.GetEnabledRelays();
                 if (0 == _relays.Length)
@@ -101,23 +101,23 @@ namespace noka
         /// <summary>
         /// タイムライン購読処理
         /// </summary>
-        public static void Subscribe()
+        public static async Task SubscribeAsync()
         {
-            if (null == _clients)
+            if (_clients == null)
             {
                 return;
             }
 
-            _ = _clients.CreateSubscription(
-                    _subscriptionId,
-                    [
-                        new NostrSubscriptionFilter()
+            await _clients.CreateSubscription(
+                _subscriptionId,
+                [
+                        new NostrSubscriptionFilter
                         {
                             Kinds = [1,7,42], // 1: テキストノート, 7: リアクション, 42: チャンネルメッセージ
                             Since = DateTimeOffset.Now - _timeSpan,
                         }
-                    ]
-                 );
+                ]
+            );
         }
         #endregion
 
@@ -126,23 +126,23 @@ namespace noka
         /// フォロイー購読処理
         /// </summary>
         /// <param name="author"></param>
-        public static void SubscribeFollows(string author)
+        public static async Task SubscribeFollowsAsync(string author)
         {
-            if (null == _clients)
+            if (_clients == null)
             {
                 return;
             }
 
-            _ = _clients.CreateSubscription(
-                    _getFolloweesSubscriptionId,
-                    [
+            await _clients.CreateSubscription(
+                _getFolloweesSubscriptionId,
+                [
                         new NostrSubscriptionFilter
                         {
                             Kinds = [3],
                             Authors = [author]
                         }
-                    ]
-                 );
+                ]
+            );
         }
         #endregion
 
@@ -151,23 +151,23 @@ namespace noka
         /// プロフィール購読処理
         /// </summary>
         /// <param name="authors"></param>
-        public static void SubscribeProfiles(string[] authors)
+        public static async Task SubscribeProfilesAsync(string[] authors)
         {
-            if (null == _clients)
+            if (_clients == null)
             {
                 return;
             }
 
-            _ = _clients.CreateSubscription(
-                    _getProfilesSubscriptionId,
-                    [
+            await _clients.CreateSubscription(
+                _getProfilesSubscriptionId,
+                [
                         new NostrSubscriptionFilter
                         {
                             Kinds = [0],
                             Authors = authors
                         }
-                    ]
-                 );
+                ]
+            );
         }
         #endregion
 
@@ -177,7 +177,7 @@ namespace noka
         /// </summary>
         public static void CloseSubscriptions()
         {
-            if (null != _clients)
+            if (_clients != null)
             {
                 _ = _clients.CloseSubscription(_subscriptionId);
                 _ = _clients.CloseSubscription(_getFolloweesSubscriptionId);
@@ -192,7 +192,7 @@ namespace noka
         /// </summary>
         public static void DisconnectAndDispose()
         {
-            if (null != _clients)
+            if (_clients != null)
             {
                 _ = _clients.Disconnect();
                 _clients.Dispose();

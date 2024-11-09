@@ -162,7 +162,7 @@ namespace noka
                 textBoxTimeline.Text = string.Empty;
                 textBoxTimeline.Text = "> Connect." + Environment.NewLine + textBoxTimeline.Text;
 
-                NostrAccess.Subscribe();
+                await NostrAccess.SubscribeAsync();
 
                 buttonStart.Enabled = false;
                 buttonStop.Enabled = true;
@@ -173,7 +173,7 @@ namespace noka
                 if (!string.IsNullOrEmpty(_npubHex))
                 {
                     // フォロイーを購読をする
-                    NostrAccess.SubscribeFollows(_npubHex);
+                    await NostrAccess.SubscribeFollowsAsync(_npubHex);
 
                     // ログインユーザー表示名取得
                     var name = GetUserName(_npubHex);
@@ -240,7 +240,7 @@ namespace noka
                             if (!string.IsNullOrEmpty(_npubHex) && nostrEvent.GetTaggedPublicKeys().Contains(_npubHex))
                             {
                                 // プロフィール購読
-                                NostrAccess.SubscribeProfiles([nostrEvent.PublicKey]);
+                                await NostrAccess.SubscribeProfilesAsync([nostrEvent.PublicKey]);
 
                                 // ユーザー取得
                                 User? user = null;
@@ -324,7 +324,7 @@ namespace noka
                             }
 
                             // プロフィール購読
-                            NostrAccess.SubscribeProfiles([nostrEvent.PublicKey]);
+                            await NostrAccess.SubscribeProfilesAsync([nostrEvent.PublicKey]);
 
                             // ユーザー取得
                             User? user = null;
@@ -629,7 +629,7 @@ namespace noka
                     }
 
                     // フォロイーを購読をする
-                    NostrAccess.SubscribeFollows(_npubHex);
+                    await NostrAccess.SubscribeFollowsAsync(_npubHex);
 
                     // ログインユーザー表示名取得
                     var name = GetUserName(_npubHex);

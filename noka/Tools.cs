@@ -80,7 +80,7 @@ namespace noka
         /// ユーザー辞書をファイルに保存する
         /// </summary>
         /// <param name="users">ユーザー辞書</param>
-        public static void SaveUsers(Dictionary<string, User?> users)
+        internal static void SaveUsers(Dictionary<string, User?> users)
         {
             // users.jsonに保存
             try
@@ -98,7 +98,7 @@ namespace noka
         /// ファイルからユーザー辞書を読み込む
         /// </summary>
         /// <returns>ユーザー辞書</returns>
-        public static Dictionary<string, User?> LoadUsers()
+        internal static Dictionary<string, User?> LoadUsers()
         {
             // users.jsonを読み込み
             if (!File.Exists(_usersJsonPath))
@@ -109,7 +109,7 @@ namespace noka
             {
                 var jsonContent = File.ReadAllText(_usersJsonPath);
                 var users = JsonSerializer.Deserialize<Dictionary<string, User?>>(jsonContent, GetOption());
-                if (null != users)
+                if (users != null)
                 {
                     return users;
                 }
@@ -137,10 +137,10 @@ namespace noka
             try
             {
                 var user = JsonSerializer.Deserialize<User>(contentJson, GetOption());
-                if (null != user)
+                if (user != null)
                 {
                     user.CreatedAt = createdAt;
-                    if (shouldMuteMostr && null != user.Nip05 && user.Nip05.Contains("mostr"))
+                    if (shouldMuteMostr && user.Nip05 != null && user.Nip05.Contains("mostr"))
                     {
                         user.Mute = true;
                     }
@@ -156,7 +156,7 @@ namespace noka
         #endregion
 
         #region リレー
-        public static void SaveRelays(List<Relay> relays)
+        internal static void SaveRelays(List<Relay> relays)
         {
             // relays.jsonに保存
             try
@@ -170,7 +170,7 @@ namespace noka
             }
         }
 
-        public static List<Relay> LoadRelays()
+        internal static List<Relay> LoadRelays()
         {
             List<Relay> defaultRelays = [
                 new Relay { Enabled = true, Url = "wss://yabu.me/" },
@@ -188,7 +188,7 @@ namespace noka
             {
                 var jsonContent = File.ReadAllText(_relaysJsonPath);
                 var relays = JsonSerializer.Deserialize<List<Relay>>(jsonContent, GetOption());
-                if (null != relays)
+                if (relays != null)
                 {
                     return relays;
                 }
@@ -200,6 +200,7 @@ namespace noka
                 return [];
             }
         }
+
         internal static Uri[] GetEnabledRelays()
         {
             return GetEnabledRelays(LoadRelays());
@@ -210,7 +211,7 @@ namespace noka
             List<Uri> enabledRelays = [];
             foreach (var relay in relays)
             {
-                if (relay.Enabled && null != relay.Url)
+                if (relay.Enabled && relay.Url != null)
                 {
                     enabledRelays.Add(new Uri(relay.Url));
                 }
