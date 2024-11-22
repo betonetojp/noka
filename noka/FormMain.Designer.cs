@@ -37,6 +37,13 @@
             buttonRelayList = new Button();
             labelRelays = new Label();
             toolTipRelays = new ToolTip(components);
+            notifyIcon = new NotifyIcon(components);
+            contextMenuStrip = new ContextMenuStrip(components);
+            formOpenToolStripMenuItem = new ToolStripMenuItem();
+            settingToolStripMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem1 = new ToolStripSeparator();
+            closeToolStripMenuItem = new ToolStripMenuItem();
+            contextMenuStrip.SuspendLayout();
             SuspendLayout();
             // 
             // buttonStart
@@ -114,6 +121,46 @@
             labelRelays.TextAlign = ContentAlignment.TopRight;
             labelRelays.MouseClick += FormMain_MouseClick;
             // 
+            // notifyIcon
+            // 
+            notifyIcon.ContextMenuStrip = contextMenuStrip;
+            notifyIcon.Icon = (Icon)resources.GetObject("notifyIcon.Icon");
+            notifyIcon.Text = "noka";
+            notifyIcon.Visible = true;
+            notifyIcon.DoubleClick += NotifyIcon_DoubleClick;
+            // 
+            // contextMenuStrip
+            // 
+            contextMenuStrip.Items.AddRange(new ToolStripItem[] { formOpenToolStripMenuItem, settingToolStripMenuItem, toolStripMenuItem1, closeToolStripMenuItem });
+            contextMenuStrip.Name = "contextMenuStrip";
+            contextMenuStrip.Size = new Size(132, 76);
+            // 
+            // formOpenToolStripMenuItem
+            // 
+            formOpenToolStripMenuItem.Name = "formOpenToolStripMenuItem";
+            formOpenToolStripMenuItem.Size = new Size(131, 22);
+            formOpenToolStripMenuItem.Text = "Form open";
+            formOpenToolStripMenuItem.Click += FormOpenToolStripMenuItem_Click;
+            // 
+            // settingToolStripMenuItem
+            // 
+            settingToolStripMenuItem.Name = "settingToolStripMenuItem";
+            settingToolStripMenuItem.Size = new Size(131, 22);
+            settingToolStripMenuItem.Text = "Setting";
+            settingToolStripMenuItem.Click += SettingToolStripMenuItem_Click;
+            // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(128, 6);
+            // 
+            // closeToolStripMenuItem
+            // 
+            closeToolStripMenuItem.Name = "closeToolStripMenuItem";
+            closeToolStripMenuItem.Size = new Size(131, 22);
+            closeToolStripMenuItem.Text = "Close";
+            closeToolStripMenuItem.Click += CloseToolStripMenuItem_Click;
+            // 
             // FormMain
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -135,8 +182,10 @@
             TopMost = true;
             FormClosing += FormMain_FormClosing;
             Load += FormMain_Load;
+            SizeChanged += FormMain_SizeChanged;
             KeyDown += FormMain_KeyDown;
             MouseClick += FormMain_MouseClick;
+            contextMenuStrip.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -149,5 +198,11 @@
         private Button buttonRelayList;
         private Label labelRelays;
         private ToolTip toolTipRelays;
+        internal NotifyIcon notifyIcon;
+        private ContextMenuStrip contextMenuStrip;
+        private ToolStripMenuItem closeToolStripMenuItem;
+        private ToolStripMenuItem formOpenToolStripMenuItem;
+        private ToolStripMenuItem settingToolStripMenuItem;
+        private ToolStripSeparator toolStripMenuItem1;
     }
 }

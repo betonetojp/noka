@@ -55,6 +55,7 @@ namespace noka
         // 重複イベントIDを保存するリスト
         private readonly LinkedList<string> _displayedEventIds = new();
         private List<SoleGhost> _soleGhosts = [new SoleGhost(), new SoleGhost()];
+        private bool _reallyClose = false;
         #endregion
 
         #region コンストラクタ
@@ -767,35 +768,42 @@ namespace noka
             }
             return false;
         }
-        #endregion
-
-        #region 閉じる時
-        // 閉じる時
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            NostrAccess.CloseSubscriptions();
-            NostrAccess.DisconnectAndDispose();
-
-            if (FormWindowState.Normal != WindowState)
+            if (!_reallyClose && e.CloseReason == CloseReason.UserClosing)
             {
-                // 最小化最大化状態の時、元の位置と大きさを保存
-                Setting.Location = RestoreBounds.Location;
-                Setting.Size = RestoreBounds.Size;
+                // 閉じるボタンが押されたときは最小化
+                e.Cancel = true;
+                this.WindowState = FormWindowState.Minimized;
+                this.Hide(); // フォームを非表示にします（タスクトレイに格納）
             }
             else
             {
-                Setting.Location = Location;
-                Setting.Size = Size;
-            }
-            Setting.Save(_configPath);
-            Tools.SaveUsers(Users);
-            Notifier.SaveSettings(); // 必要ないが更新日時をそろえるため
-            Tools.SaveSoleGhosts(_soleGhosts);
+                // アプリケーション終了時の処理
+                NostrAccess.CloseSubscriptions();
+                NostrAccess.DisconnectAndDispose();
 
-            _ds.Dispose();      // FrmMsgReceiverのThread停止せず1000ms待たされるうえにプロセス残るので…
-            Application.Exit(); // ←これで殺す。SSTLibに手を入れた方がいいが、とりあえず。
+                if (this.WindowState != FormWindowState.Normal)
+                {
+                    // 元の位置とサイズを保存
+                    Setting.Location = this.RestoreBounds.Location;
+                    Setting.Size = this.RestoreBounds.Size;
+                }
+                else
+                {
+                    Setting.Location = this.Location;
+                    Setting.Size = this.Size;
+                }
+                Setting.Save(_configPath);
+                Tools.SaveUsers(Users);
+                Notifier.SaveSettings(); // 更新日時を揃えるため
+                Tools.SaveSoleGhosts(_soleGhosts);
+
+                _ds.Dispose();
+                Application.Exit();
+            }
         }
-        #endregion
+#endregion
 
         #region ロード時
         // ロード時
@@ -861,5 +869,54 @@ namespace noka
             _soleGhosts = Tools.LoadSoleGhosts();
         }
         #endregion
+
+        private void NotifyIcon_DoubleClick(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized)
+            {
+                Show();
+                WindowState = FormWindowState.Normal;
+            }
+            else if (WindowState == FormWindowState.Normal)
+            {
+                WindowState = FormWindowState.Minimized;
+            }
+        }
+
+        private void FormOpenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized)
+            {
+                Show();
+                WindowState = FormWindowState.Normal;
+            }
+        }
+
+        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _reallyClose = true;
+            this.Close();
+        }
+
+        private void FormMain_SizeChanged(object sender, EventArgs e)
+        {
+            // 最小化時はタスクトレイに格納
+            if (WindowState == FormWindowState.Minimized)
+            {
+                Hide();
+            }
+        }
+
+        private void SettingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // 設定画面がすでに開かれている場合は抜ける
+            if (_formSetting.Visible)
+            {
+                return;
+            }
+            Show();
+            WindowState = FormWindowState.Normal;
+            ButtonSetting_Click(sender, e);
+        }
     }
 }
