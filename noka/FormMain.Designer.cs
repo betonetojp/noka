@@ -127,7 +127,7 @@
             notifyIcon.Icon = (Icon)resources.GetObject("notifyIcon.Icon");
             notifyIcon.Text = "noka";
             notifyIcon.Visible = true;
-            notifyIcon.DoubleClick += NotifyIcon_DoubleClick;
+            notifyIcon.Click += NotifyIcon_Click;
             // 
             // contextMenuStrip
             // 

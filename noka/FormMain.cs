@@ -803,7 +803,7 @@ namespace noka
                 Application.Exit();
             }
         }
-#endregion
+        #endregion
 
         #region ロード時
         // ロード時
@@ -870,8 +870,14 @@ namespace noka
         }
         #endregion
 
-        private void NotifyIcon_DoubleClick(object sender, EventArgs e)
+        private void NotifyIcon_Click(object sender, EventArgs e)
         {
+            // 右クリック時は抜ける
+            if (e is MouseEventArgs me && me.Button == MouseButtons.Right)
+            {
+                return;
+            }
+
             if (WindowState == FormWindowState.Minimized)
             {
                 Show();
