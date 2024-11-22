@@ -2,13 +2,16 @@
 using NNostr.Client.Protocols;
 using SSTPLib;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace noka
 {
     public partial class FormMain : Form
     {
         #region フィールド
-        //private readonly NostrAccess _nostrAccess = new();
+        private const string NostrPattern = @"nostr:(\w+)";
+        private const string ImagePattern = @"(https?:\/\/.*\.(jpg|jpeg|png|gif|bmp|webp))";
+        private const string UrlPattern = @"(https?:\/\/[^\s]+)";
 
         private readonly string _configPath = Path.Combine(Application.StartupPath, "noka.config");
 
@@ -304,6 +307,35 @@ namespace noka
                         if (1 == nostrEvent.Kind || 42 == nostrEvent.Kind)
                         {
                             #region テキストノート
+                            string editedContent = content;
+
+                            // nostr:npub1またはnostr:nprofile1が含まれている場合、@ユーザー名を取得
+                            MatchCollection matches = Regex.Matches(editedContent, @"nostr:(npub1\w+|nprofile1\w+)");
+                            foreach (Match match in matches)
+                            {
+                                if (match.Success)
+                                {
+                                    string npubOrNprofile = match.Groups[1].Value.ConvertToHex();
+                                    // ユーザー名取得
+                                    string mentionedUserName = $"@{GetUserName(npubOrNprofile)}";
+                                    // nostr:npub1またはnostr:nprofile1を@ユーザー名に置き換え
+                                    editedContent = editedContent.Replace(match.Value, mentionedUserName);
+                                }
+                            }
+
+                            //string nostrPattern = @"nostr:(\w+)";
+                            // nostr:を含む場合、(citations omitted)に置き換え
+                            editedContent = Regex.Replace(editedContent, NostrPattern, "［💬］");
+
+                            //string imagePattern = @"(https?:\/\/.*\.(jpg|jpeg|png|gif|bmp|webp))";
+                            // 画像URLを含む場合、(image)に置き換え
+                            editedContent = Regex.Replace(editedContent, ImagePattern, "［🖼️］", RegexOptions.IgnoreCase);
+
+                            //string urlPattern = @"(https?:\/\/[^\s]+)";
+                            // URLを含む場合、(url)に置き換え
+                            editedContent = Regex.Replace(editedContent, UrlPattern, "［🔗］", RegexOptions.IgnoreCase);
+
+
                             if (42 == nostrEvent.Kind)
                             {
                                 headMark = "=";
@@ -380,7 +412,7 @@ namespace noka
                                 //SearchGhost();
                                 _ds.Update();
 
-                                string msg = content;
+                                string msg = editedContent;
                                 // 本文カット
                                 if (msg.Length > _cutLength)
                                 {
@@ -443,18 +475,20 @@ namespace noka
                                 }
                             }
 
-                            // 改行をスペースに置き換え
-                            content = content.Replace('\n', ' ');
+                            //// 改行をスペースに置き換え
+                            //editedContent = editedContent.Replace('\n', ' ');
+                            // 改行を表示用に置き換え
+                            editedContent = editedContent.Replace("\n", "\r\n ");
                             // 本文カット
-                            if (content.Length > _cutLength)
+                            if (editedContent.Length > _cutLength)
                             {
-                                content = $"{content[.._cutLength]}...";
+                                editedContent = $"{editedContent[.._cutLength]}...";
                             }
                             // 画面に表示
                             textBoxTimeline.Text = (iSnokakoi ? "[n]" : string.Empty) + headMark
                                                  + $"{timeString} {userName}{Environment.NewLine}"
-                                                 + " " + content + Environment.NewLine + textBoxTimeline.Text;
-                            Debug.WriteLine($"{timeString} {userName} {content}");
+                                                 + " " + editedContent + Environment.NewLine + textBoxTimeline.Text;
+                            Debug.WriteLine($"{timeString} {userName} {editedContent}");
                             #endregion
                         }
                     }
