@@ -39,10 +39,9 @@
             toolTipRelays = new ToolTip(components);
             notifyIcon = new NotifyIcon(components);
             contextMenuStrip = new ContextMenuStrip(components);
-            formOpenToolStripMenuItem = new ToolStripMenuItem();
             settingToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItem1 = new ToolStripSeparator();
-            closeToolStripMenuItem = new ToolStripMenuItem();
+            quitToolStripMenuItem = new ToolStripMenuItem();
             contextMenuStrip.SuspendLayout();
             SuspendLayout();
             // 
@@ -131,35 +130,28 @@
             // 
             // contextMenuStrip
             // 
-            contextMenuStrip.Items.AddRange(new ToolStripItem[] { formOpenToolStripMenuItem, settingToolStripMenuItem, toolStripMenuItem1, closeToolStripMenuItem });
+            contextMenuStrip.Items.AddRange(new ToolStripItem[] { settingToolStripMenuItem, toolStripMenuItem1, quitToolStripMenuItem });
             contextMenuStrip.Name = "contextMenuStrip";
-            contextMenuStrip.Size = new Size(132, 76);
-            // 
-            // formOpenToolStripMenuItem
-            // 
-            formOpenToolStripMenuItem.Name = "formOpenToolStripMenuItem";
-            formOpenToolStripMenuItem.Size = new Size(131, 22);
-            formOpenToolStripMenuItem.Text = "Form open";
-            formOpenToolStripMenuItem.Click += FormOpenToolStripMenuItem_Click;
+            contextMenuStrip.Size = new Size(181, 76);
             // 
             // settingToolStripMenuItem
             // 
             settingToolStripMenuItem.Name = "settingToolStripMenuItem";
-            settingToolStripMenuItem.Size = new Size(131, 22);
+            settingToolStripMenuItem.Size = new Size(180, 22);
             settingToolStripMenuItem.Text = "Setting";
             settingToolStripMenuItem.Click += SettingToolStripMenuItem_Click;
             // 
             // toolStripMenuItem1
             // 
             toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(128, 6);
+            toolStripMenuItem1.Size = new Size(177, 6);
             // 
-            // closeToolStripMenuItem
+            // quitToolStripMenuItem
             // 
-            closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            closeToolStripMenuItem.Size = new Size(131, 22);
-            closeToolStripMenuItem.Text = "Close";
-            closeToolStripMenuItem.Click += CloseToolStripMenuItem_Click;
+            quitToolStripMenuItem.Name = "quitToolStripMenuItem";
+            quitToolStripMenuItem.Size = new Size(180, 22);
+            quitToolStripMenuItem.Text = "Quit";
+            quitToolStripMenuItem.Click += QuitToolStripMenuItem_Click;
             // 
             // FormMain
             // 
@@ -200,8 +192,7 @@
         private ToolTip toolTipRelays;
         internal NotifyIcon notifyIcon;
         private ContextMenuStrip contextMenuStrip;
-        private ToolStripMenuItem closeToolStripMenuItem;
-        private ToolStripMenuItem formOpenToolStripMenuItem;
+        private ToolStripMenuItem quitToolStripMenuItem;
         private ToolStripMenuItem settingToolStripMenuItem;
         private ToolStripSeparator toolStripMenuItem1;
     }

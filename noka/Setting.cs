@@ -22,6 +22,7 @@ namespace noka
             public int CutNameLength { get; set; } = 8;
             public double Opacity { get; set; } = 1.00;
             public bool ShowOnlyFollowees { get; set; } = false;
+            public bool MinimizeToTray { get; set; } = false;
             public string Ghost { get; set; } = string.Empty;
             public string Npub { get; set; } = string.Empty;
             public string DefaultPicture { get; set; } = "https://robohash.org/{npub}?set=set4&size=128x128";
@@ -105,6 +106,17 @@ namespace noka
             set
             {
                 _data.ShowOnlyFollowees = value;
+            }
+        }
+        public static bool MinimizeToTray
+        {
+            get
+            {
+                return _data.MinimizeToTray;
+            }
+            set
+            {
+                _data.MinimizeToTray = value;
             }
         }
         public static string Ghost

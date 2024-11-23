@@ -39,6 +39,7 @@ namespace noka
         private int _cutLength;
         private int _cutNameLength;
         private bool _showOnlyFollowees;
+        private bool _minimizeToTray;
 
         private double _tempOpacity = 1.00;
 
@@ -105,6 +106,7 @@ namespace noka
             }
             _tempOpacity = Opacity;
             _showOnlyFollowees = Setting.ShowOnlyFollowees;
+            _minimizeToTray = Setting.MinimizeToTray;
             _ghostName = Setting.Ghost;
             _soleGhostsOnly = Setting.SoleGhostsOnly;
             _npub = Setting.Npub;
@@ -611,6 +613,7 @@ namespace noka
             _formSetting.textBoxCutNameLength.Text = _cutNameLength.ToString();
             _formSetting.trackBarOpacity.Value = (int)(Opacity * 100);
             _formSetting.checkBoxShowOnlyFollowees.Checked = _showOnlyFollowees;
+            _formSetting.checkBoxMinimizeToTray.Checked = _minimizeToTray;
             _formSetting.textBoxNpub.Text = _npub;
             _formSetting.textBoxDefaultPicture.Text = _defaultPicture;
             _formSetting._mainGhost = _ghostName;
@@ -639,6 +642,7 @@ namespace noka
             }
             Opacity = _formSetting.trackBarOpacity.Value / 100.0;
             _showOnlyFollowees = _formSetting.checkBoxShowOnlyFollowees.Checked;
+            _minimizeToTray = _formSetting.checkBoxMinimizeToTray.Checked;
             _tempOpacity = Opacity;
             _ghostName = _formSetting._mainGhost;
             _npub = _formSetting.textBoxNpub.Text;
@@ -682,6 +686,7 @@ namespace noka
             Setting.CutNameLength = _cutNameLength;
             Setting.Opacity = Opacity;
             Setting.ShowOnlyFollowees = _showOnlyFollowees;
+            Setting.MinimizeToTray = _minimizeToTray;
             Setting.Ghost = _ghostName;
             Setting.SoleGhostsOnly = _soleGhostsOnly;
             Setting.Npub = _npub;
@@ -804,12 +809,12 @@ namespace noka
         }
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!_reallyClose && e.CloseReason == CloseReason.UserClosing)
+            if (_minimizeToTray && !_reallyClose && e.CloseReason == CloseReason.UserClosing)
             {
                 // 閉じるボタンが押されたときは最小化
                 e.Cancel = true;
-                this.WindowState = FormWindowState.Minimized;
-                this.Hide(); // フォームを非表示にします（タスクトレイに格納）
+                WindowState = FormWindowState.Minimized;
+                Hide(); // フォームを非表示にします（タスクトレイに格納）
             }
             else
             {
@@ -817,16 +822,16 @@ namespace noka
                 NostrAccess.CloseSubscriptions();
                 NostrAccess.DisconnectAndDispose();
 
-                if (this.WindowState != FormWindowState.Normal)
+                if (WindowState != FormWindowState.Normal)
                 {
                     // 元の位置とサイズを保存
-                    Setting.Location = this.RestoreBounds.Location;
-                    Setting.Size = this.RestoreBounds.Size;
+                    Setting.Location = RestoreBounds.Location;
+                    Setting.Size = RestoreBounds.Size;
                 }
                 else
                 {
-                    Setting.Location = this.Location;
-                    Setting.Size = this.Size;
+                    Setting.Location = Location;
+                    Setting.Size = Size;
                 }
                 Setting.Save(_configPath);
                 Tools.SaveUsers(Users);
@@ -923,25 +928,16 @@ namespace noka
             }
         }
 
-        private void FormOpenToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (WindowState == FormWindowState.Minimized)
-            {
-                Show();
-                WindowState = FormWindowState.Normal;
-            }
-        }
-
-        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
+        private void QuitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _reallyClose = true;
-            this.Close();
+            Close();
         }
 
         private void FormMain_SizeChanged(object sender, EventArgs e)
         {
             // 最小化時はタスクトレイに格納
-            if (WindowState == FormWindowState.Minimized)
+            if (_minimizeToTray && WindowState == FormWindowState.Minimized)
             {
                 Hide();
             }

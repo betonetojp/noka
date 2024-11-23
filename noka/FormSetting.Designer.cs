@@ -57,6 +57,7 @@
             buttonSave = new Button();
             buttonDelete = new Button();
             dataGridViewSoloGhosts = new DataGridView();
+            checkBoxMinimizeToTray = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)trackBarOpacity).BeginInit();
             tabControlSettings.SuspendLayout();
             tabPage1.SuspendLayout();
@@ -69,12 +70,12 @@
             textBoxNpub.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             textBoxNpub.BorderStyle = BorderStyle.FixedSingle;
             textBoxNpub.ImeMode = ImeMode.Disable;
-            textBoxNpub.Location = new Point(73, 114);
+            textBoxNpub.Location = new Point(73, 139);
             textBoxNpub.MaxLength = 136;
             textBoxNpub.Name = "textBoxNpub";
             textBoxNpub.PlaceholderText = "npub1 . . .";
             textBoxNpub.Size = new Size(171, 23);
-            textBoxNpub.TabIndex = 7;
+            textBoxNpub.TabIndex = 8;
             // 
             // textBoxCutLength
             // 
@@ -130,7 +131,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(6, 116);
+            label3.Location = new Point(6, 141);
             label3.Name = "label3";
             label3.Size = new Size(61, 15);
             label3.TabIndex = 0;
@@ -154,7 +155,7 @@
             linkLabelIcons8.Location = new Point(203, 189);
             linkLabelIcons8.Name = "linkLabelIcons8";
             linkLabelIcons8.Size = new Size(41, 15);
-            linkLabelIcons8.TabIndex = 8;
+            linkLabelIcons8.TabIndex = 9;
             linkLabelIcons8.TabStop = true;
             linkLabelIcons8.Text = "Icons8";
             linkLabelIcons8.LinkClicked += LinkLabelIcons8_LinkClicked;
@@ -260,6 +261,7 @@
             // tabPage1
             // 
             tabPage1.BorderStyle = BorderStyle.FixedSingle;
+            tabPage1.Controls.Add(checkBoxMinimizeToTray);
             tabPage1.Controls.Add(label1);
             tabPage1.Controls.Add(textBoxCutLength);
             tabPage1.Controls.Add(label4);
@@ -375,6 +377,16 @@
             dataGridViewSoloGhosts.Size = new Size(238, 83);
             dataGridViewSoloGhosts.TabIndex = 13;
             // 
+            // checkBoxMinimizeToTray
+            // 
+            checkBoxMinimizeToTray.AutoSize = true;
+            checkBoxMinimizeToTray.Location = new Point(6, 114);
+            checkBoxMinimizeToTray.Name = "checkBoxMinimizeToTray";
+            checkBoxMinimizeToTray.Size = new Size(176, 19);
+            checkBoxMinimizeToTray.TabIndex = 7;
+            checkBoxMinimizeToTray.Text = "Minimize to notification area";
+            checkBoxMinimizeToTray.UseVisualStyleBackColor = true;
+            // 
             // FormSetting
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -436,5 +448,6 @@
         private Button buttonReload;
         private Label label8;
         internal TextBox textBoxDefaultPicture;
+        internal CheckBox checkBoxMinimizeToTray;
     }
 }
