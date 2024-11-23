@@ -107,6 +107,7 @@ namespace noka
             _tempOpacity = Opacity;
             _showOnlyFollowees = Setting.ShowOnlyFollowees;
             _minimizeToTray = Setting.MinimizeToTray;
+            notifyIcon.Visible = _minimizeToTray;
             _ghostName = Setting.Ghost;
             _soleGhostsOnly = Setting.SoleGhostsOnly;
             _npub = Setting.Npub;
@@ -643,6 +644,7 @@ namespace noka
             Opacity = _formSetting.trackBarOpacity.Value / 100.0;
             _showOnlyFollowees = _formSetting.checkBoxShowOnlyFollowees.Checked;
             _minimizeToTray = _formSetting.checkBoxMinimizeToTray.Checked;
+            notifyIcon.Visible = _minimizeToTray;
             _tempOpacity = Opacity;
             _ghostName = _formSetting._mainGhost;
             _npub = _formSetting.textBoxNpub.Text;

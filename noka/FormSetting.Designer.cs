@@ -50,6 +50,7 @@
             checkBoxSoleGhostsOnly = new CheckBox();
             tabControlSettings = new TabControl();
             tabPage1 = new TabPage();
+            checkBoxMinimizeToTray = new CheckBox();
             tabPage2 = new TabPage();
             label8 = new Label();
             textBoxDefaultPicture = new TextBox();
@@ -57,7 +58,6 @@
             buttonSave = new Button();
             buttonDelete = new Button();
             dataGridViewSoloGhosts = new DataGridView();
-            checkBoxMinimizeToTray = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)trackBarOpacity).BeginInit();
             tabControlSettings.SuspendLayout();
             tabPage1.SuspendLayout();
@@ -283,6 +283,16 @@
             tabPage1.TabIndex = 0;
             tabPage1.Text = "General";
             // 
+            // checkBoxMinimizeToTray
+            // 
+            checkBoxMinimizeToTray.AutoSize = true;
+            checkBoxMinimizeToTray.Location = new Point(6, 114);
+            checkBoxMinimizeToTray.Name = "checkBoxMinimizeToTray";
+            checkBoxMinimizeToTray.Size = new Size(150, 19);
+            checkBoxMinimizeToTray.TabIndex = 7;
+            checkBoxMinimizeToTray.Text = "Minimize to system tray";
+            checkBoxMinimizeToTray.UseVisualStyleBackColor = true;
+            // 
             // tabPage2
             // 
             tabPage2.BorderStyle = BorderStyle.FixedSingle;
@@ -376,16 +386,6 @@
             dataGridViewSoloGhosts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewSoloGhosts.Size = new Size(238, 83);
             dataGridViewSoloGhosts.TabIndex = 13;
-            // 
-            // checkBoxMinimizeToTray
-            // 
-            checkBoxMinimizeToTray.AutoSize = true;
-            checkBoxMinimizeToTray.Location = new Point(6, 114);
-            checkBoxMinimizeToTray.Name = "checkBoxMinimizeToTray";
-            checkBoxMinimizeToTray.Size = new Size(176, 19);
-            checkBoxMinimizeToTray.TabIndex = 7;
-            checkBoxMinimizeToTray.Text = "Minimize to notification area";
-            checkBoxMinimizeToTray.UseVisualStyleBackColor = true;
             // 
             // FormSetting
             // 
