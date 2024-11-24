@@ -809,6 +809,9 @@ namespace noka
             }
             return false;
         }
+        #endregion
+
+        #region 閉じる
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (_minimizeToTray && !_reallyClose && e.CloseReason == CloseReason.UserClosing)
@@ -820,13 +823,12 @@ namespace noka
             }
             else
             {
-                // アプリケーション終了時の処理
                 NostrAccess.CloseSubscriptions();
                 NostrAccess.DisconnectAndDispose();
 
                 if (WindowState != FormWindowState.Normal)
                 {
-                    // 元の位置とサイズを保存
+                    // 最小化最大化状態の時、元の位置と大きさを保存
                     Setting.Location = RestoreBounds.Location;
                     Setting.Size = RestoreBounds.Size;
                 }
@@ -930,6 +932,18 @@ namespace noka
             }
         }
 
+        private void SettingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // 設定画面がすでに開かれている場合は抜ける
+            if (_formSetting.Visible)
+            {
+                return;
+            }
+            Show();
+            WindowState = FormWindowState.Normal;
+            ButtonSetting_Click(sender, e);
+        }
+
         private void QuitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _reallyClose = true;
@@ -943,18 +957,6 @@ namespace noka
             {
                 Hide();
             }
-        }
-
-        private void SettingToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // 設定画面がすでに開かれている場合は抜ける
-            if (_formSetting.Visible)
-            {
-                return;
-            }
-            Show();
-            WindowState = FormWindowState.Normal;
-            ButtonSetting_Click(sender, e);
         }
     }
 }
