@@ -60,6 +60,7 @@ namespace noka
         private readonly LinkedList<string> _displayedEventIds = new();
         private List<SoleGhost> _soleGhosts = [new SoleGhost(), new SoleGhost()];
         private bool _reallyClose = false;
+        private static Mutex? _mutex;
         #endregion
 
         #region コンストラクタ
@@ -67,6 +68,21 @@ namespace noka
         public FormMain()
         {
             InitializeComponent();
+
+            // アプリケーションの実行パスを取得
+            string exePath = Application.ExecutablePath;
+            string mutexName = $"nokaMutex_{exePath.Replace("\\", "_")}";
+
+            // 二重起動を防ぐためのミューテックスを作成
+            bool createdNew;
+            _mutex = new Mutex(true, mutexName, out createdNew);
+
+            if (!createdNew)
+            {
+                // 既に起動している場合はメッセージを表示して終了
+                MessageBox.Show("Already running.", "noka", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Environment.Exit(0);
+            }
 
             // ボタンの画像をDPIに合わせて表示
             float scale = CreateGraphics().DpiX / 96f;
@@ -185,6 +201,13 @@ namespace noka
                     // ログインユーザー表示名取得
                     var name = GetUserName(_npubHex);
                     textBoxTimeline.Text = $"> Login as {name}." + Environment.NewLine + textBoxTimeline.Text;
+
+                    var loginName = GetName(_npubHex);
+                    if (!string.IsNullOrEmpty(loginName))
+                    {
+                        Text = $"noka - @{loginName}";
+                        notifyIcon.Text = $"noka - @{loginName}";
+                    }
                 }
             }
             catch (Exception ex)
@@ -655,6 +678,8 @@ namespace noka
                 // 別アカウントログイン失敗に備えてクリアしておく
                 _npubHex = string.Empty;
                 _followeesHexs.Clear();
+                Text = "noka";
+                notifyIcon.Text = "noka";
 
                 // 公開鍵取得
                 _npubHex = _npub.ConvertToHex();
@@ -675,6 +700,13 @@ namespace noka
                     // ログインユーザー表示名取得
                     var name = GetUserName(_npubHex);
                     textBoxTimeline.Text = $"> Login as {name}." + Environment.NewLine + textBoxTimeline.Text;
+
+                    var loginName = GetName(_npubHex);
+                    if (!string.IsNullOrEmpty(loginName))
+                    {
+                        Text = $"noka - @{loginName}";
+                        notifyIcon.Text = $"noka - @{loginName}";
+                    }
                 }
             }
             catch (Exception ex)
@@ -757,6 +789,28 @@ namespace noka
         //        //Debug.Print("ゴーストがいません");
         //    }
         //}
+        #endregion
+
+        #region ユーザー名を取得する
+        /// <summary>
+        /// ユーザー名を取得する
+        /// </summary>
+        /// <param name="publicKeyHex">公開鍵HEX</param>
+        /// <returns>ユーザー名</returns>
+        private string? GetName(string publicKeyHex)
+        {
+            // 情報があればユーザー名を取得
+            Users.TryGetValue(publicKeyHex, out User? user);
+            string? userName = string.Empty;
+            if (user != null)
+            {
+                userName = user.Name;
+                // 取得日更新
+                user.LastActivity = DateTime.Now;
+                Tools.SaveUsers(Users);
+            }
+            return userName;
+        }
         #endregion
 
         #region ユーザー表示名を取得する
