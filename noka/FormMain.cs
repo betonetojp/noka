@@ -158,16 +158,16 @@ namespace noka
                     switch (connectCount)
                     {
                         case 0:
-                            labelRelays.Text = "0 relays";
+                            labelRelays.Text = "No relay enabled.";
                             toolTipRelays.SetToolTip(labelRelays, string.Empty);
                             break;
                         case 1:
-                            labelRelays.Text = NostrAccess.Relays[0].ToString();
-                            toolTipRelays.SetToolTip(labelRelays, string.Join("\n", NostrAccess.Relays.Select(r => r.ToString())));
+                            labelRelays.Text = NostrAccess.RelayStatusList[0];
+                            toolTipRelays.SetToolTip(labelRelays, string.Join("\n", NostrAccess.RelayStatusList));
                             break;
                         default:
                             labelRelays.Text = $"{NostrAccess.Relays.Length} relays";
-                            toolTipRelays.SetToolTip(labelRelays, string.Join("\n", NostrAccess.Relays.Select(r => r.ToString())));
+                            toolTipRelays.SetToolTip(labelRelays, string.Join("\n", NostrAccess.RelayStatusList));
                             break;
                     }
                     if (null != NostrAccess.Clients)
