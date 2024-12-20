@@ -155,31 +155,28 @@ namespace noka
                 else
                 {
                     connectCount = await NostrAccess.ConnectAsync();
-                    switch (connectCount)
-                    {
-                        case 0:
-                            labelRelays.Text = "No relay enabled.";
-                            toolTipRelays.SetToolTip(labelRelays, string.Empty);
-                            break;
-                        case 1:
-                            labelRelays.Text = NostrAccess.RelayStatusList[0];
-                            toolTipRelays.SetToolTip(labelRelays, string.Join("\n", NostrAccess.RelayStatusList));
-                            break;
-                        default:
-                            labelRelays.Text = $"{NostrAccess.Relays.Length} relays";
-                            toolTipRelays.SetToolTip(labelRelays, string.Join("\n", NostrAccess.RelayStatusList));
-                            break;
-                    }
+
                     if (null != NostrAccess.Clients)
                     {
                         NostrAccess.Clients.EventsReceived += OnClientOnEventsReceived;
                     }
                 }
 
-                if (0 == connectCount)
+                toolTipRelays.SetToolTip(labelRelays, string.Join("\n", NostrAccess.RelayStatusList));
+
+                switch (connectCount)
                 {
-                    textBoxTimeline.Text = "> No relay enabled." + Environment.NewLine + textBoxTimeline.Text;
-                    return;
+                    case 0:
+                        labelRelays.Text = "No relay enabled.";
+                        buttonStart.Enabled = false;
+                        textBoxTimeline.Text = "> No relay enabled." + Environment.NewLine + textBoxTimeline.Text;
+                        return;
+                    case 1:
+                        labelRelays.Text = $"{connectCount} relay";
+                        break;
+                    default:
+                        labelRelays.Text = $"{connectCount} relays";
+                        break;
                 }
 
                 textBoxTimeline.Text = string.Empty;
@@ -688,10 +685,21 @@ namespace noka
                 if (!string.IsNullOrEmpty(_npubHex))
                 {
                     int connectCount = await NostrAccess.ConnectAsync();
-                    if (0 == connectCount)
+
+                    toolTipRelays.SetToolTip(labelRelays, string.Join("\n", NostrAccess.RelayStatusList));
+
+                    switch (connectCount)
                     {
-                        textBoxTimeline.Text = "> No relay enabled." + Environment.NewLine + textBoxTimeline.Text;
-                        return;
+                        case 0:
+                            labelRelays.Text = "No relay enabled.";
+                            textBoxTimeline.Text = "> No relay enabled." + Environment.NewLine + textBoxTimeline.Text;
+                            return;
+                        case 1:
+                            labelRelays.Text = $"{connectCount} relay";
+                            break;
+                        default:
+                            labelRelays.Text = $"{connectCount} relays";
+                            break;
                     }
 
                     // フォロイーを購読をする
