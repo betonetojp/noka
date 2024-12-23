@@ -28,7 +28,7 @@ namespace noka
         private List<string> _muteWords = [];
         private List<string> _keywords = [];
         private bool _shouldOpenFile = false;
-        private string _fileName = "https://lumilumi.vercel.app/";
+        private string _fileName = "https://lumilumi.app/";
 
         //private readonly string _keywordsJsonPath = Path.Combine(Tools.GetAppPath(), "keywords.json");
         private readonly string _keywordsJsonPath = Path.Combine(Application.StartupPath, "keywords.json");

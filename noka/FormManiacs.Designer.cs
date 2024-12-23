@@ -171,7 +171,7 @@
             textBoxFileName.Name = "textBoxFileName";
             textBoxFileName.Size = new Size(115, 23);
             textBoxFileName.TabIndex = 8;
-            textBoxFileName.Text = "https://lumilumi.vercel.app/";
+            textBoxFileName.Text = "https://lumilumi.app/";
             // 
             // textBoxKeywords
             // 
