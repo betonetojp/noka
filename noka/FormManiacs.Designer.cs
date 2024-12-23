@@ -180,7 +180,6 @@
             textBoxKeywords.Location = new Point(252, 302);
             textBoxKeywords.Multiline = true;
             textBoxKeywords.Name = "textBoxKeywords";
-            textBoxKeywords.ScrollBars = ScrollBars.Vertical;
             textBoxKeywords.Size = new Size(200, 73);
             textBoxKeywords.TabIndex = 6;
             // 
@@ -234,7 +233,6 @@
             textBoxMuteWords.Location = new Point(12, 302);
             textBoxMuteWords.Multiline = true;
             textBoxMuteWords.Name = "textBoxMuteWords";
-            textBoxMuteWords.ScrollBars = ScrollBars.Vertical;
             textBoxMuteWords.Size = new Size(200, 127);
             textBoxMuteWords.TabIndex = 5;
             // 
