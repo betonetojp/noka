@@ -23,9 +23,12 @@ namespace noka
             public double Opacity { get; set; } = 1.00;
             public bool ShowOnlyFollowees { get; set; } = false;
             public bool MinimizeToTray { get; set; } = false;
-            public string Ghost { get; set; } = string.Empty;
             public string Npub { get; set; } = string.Empty;
+            public bool ShowNetes { get; set; } = true;
+            public bool ShowReactions { get; set; } = true;
+            public bool ShowChats { get; set; } = true;
             public string DefaultPicture { get; set; } = "https://robohash.org/{npub}?set=set4&size=128x128";
+            public string Ghost { get; set; } = string.Empty;
             public bool SoleGhostsOnly { get; set; } = false;
         }
         #endregion
@@ -119,17 +122,6 @@ namespace noka
                 _data.MinimizeToTray = value;
             }
         }
-        public static string Ghost
-        {
-            get
-            {
-                return _data.Ghost;
-            }
-            set
-            {
-                _data.Ghost = value;
-            }
-        }
         public static string Npub
         {
             get
@@ -141,6 +133,39 @@ namespace noka
                 _data.Npub = value;
             }
         }
+        public static bool ShowNetes
+        {
+            get
+            {
+                return _data.ShowNetes;
+            }
+            set
+            {
+                _data.ShowNetes = value;
+            }
+        }
+        public static bool ShowReactions
+        {
+            get
+            {
+                return _data.ShowReactions;
+            }
+            set
+            {
+                _data.ShowReactions = value;
+            }
+        }
+        public static bool ShowChats
+        {
+            get
+            {
+                return _data.ShowChats;
+            }
+            set
+            {
+                _data.ShowChats = value;
+            }
+        }
         public static string DefaultPicture
         {
             get
@@ -150,6 +175,17 @@ namespace noka
             set
             {
                 _data.DefaultPicture = value;
+            }
+        }
+        public static string Ghost
+        {
+            get
+            {
+                return _data.Ghost;
+            }
+            set
+            {
+                _data.Ghost = value;
             }
         }
         public static bool SoleGhostsOnly

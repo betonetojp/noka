@@ -40,6 +40,9 @@ namespace noka
         private int _cutNameLength;
         private bool _showOnlyFollowees;
         private bool _minimizeToTray;
+        private bool _showNetes;
+        private bool _showReactions;
+        private bool _showChats;
 
         private double _tempOpacity = 1.00;
 
@@ -124,10 +127,13 @@ namespace noka
             _showOnlyFollowees = Setting.ShowOnlyFollowees;
             _minimizeToTray = Setting.MinimizeToTray;
             notifyIcon.Visible = _minimizeToTray;
+            _npub = Setting.Npub;
+            _showNetes = Setting.ShowNetes;
+            _showReactions = Setting.ShowReactions;
+            _showChats = Setting.ShowChats;
+            _defaultPicture = Setting.DefaultPicture;
             _ghostName = Setting.Ghost;
             _soleGhostsOnly = Setting.SoleGhostsOnly;
-            _npub = Setting.Npub;
-            _defaultPicture = Setting.DefaultPicture;
             try
             {
                 _npubHex = _npub.ConvertToHex();
@@ -260,7 +266,7 @@ namespace noka
                             speaker = "\\0";
                         }
 
-                        if (7 == nostrEvent.Kind)
+                        if (7 == nostrEvent.Kind && _showReactions)
                         {
                             #region リアクション
                             // ログイン済みで自分へのリアクション
@@ -329,7 +335,16 @@ namespace noka
                         }
                         if (1 == nostrEvent.Kind || 42 == nostrEvent.Kind)
                         {
-                            #region テキストノート
+                            if (1 == nostrEvent.Kind && !_showNetes)
+                            {
+                                continue;
+                            }
+                            if (42 == nostrEvent.Kind && !_showChats)
+                            {
+                                continue;
+                            }
+
+                            #region テキストノートとチャットメッセージ
                             string editedContent = content;
 
                             // nostr:npub1またはnostr:nprofile1が含まれている場合、@ユーザー名を取得
@@ -636,6 +651,9 @@ namespace noka
             _formSetting.checkBoxShowOnlyFollowees.Checked = _showOnlyFollowees;
             _formSetting.checkBoxMinimizeToTray.Checked = _minimizeToTray;
             _formSetting.textBoxNpub.Text = _npub;
+            _formSetting.checkBoxNote.Checked = _showNetes;
+            _formSetting.checkBoxReaction.Checked = _showReactions;
+            _formSetting.checkBoxChat.Checked = _showChats;
             _formSetting.textBoxDefaultPicture.Text = _defaultPicture;
             _formSetting._mainGhost = _ghostName;
             _formSetting.checkBoxSoleGhostsOnly.Checked = _soleGhostsOnly;
@@ -662,13 +680,16 @@ namespace noka
                 _cutNameLength = 1;
             }
             Opacity = _formSetting.trackBarOpacity.Value / 100.0;
+            _tempOpacity = Opacity;
             _showOnlyFollowees = _formSetting.checkBoxShowOnlyFollowees.Checked;
             _minimizeToTray = _formSetting.checkBoxMinimizeToTray.Checked;
             notifyIcon.Visible = _minimizeToTray;
-            _tempOpacity = Opacity;
-            _ghostName = _formSetting._mainGhost;
             _npub = _formSetting.textBoxNpub.Text;
+            _showNetes = _formSetting.checkBoxNote.Checked;
+            _showReactions = _formSetting.checkBoxReaction.Checked;
+            _showChats = _formSetting.checkBoxChat.Checked;
             _defaultPicture = _formSetting.textBoxDefaultPicture.Text;
+            _ghostName = _formSetting._mainGhost;
             _soleGhostsOnly = _formSetting.checkBoxSoleGhostsOnly.Checked;
             try
             {
@@ -729,10 +750,13 @@ namespace noka
             Setting.Opacity = Opacity;
             Setting.ShowOnlyFollowees = _showOnlyFollowees;
             Setting.MinimizeToTray = _minimizeToTray;
+            Setting.Npub = _npub;
+            Setting.ShowNetes = _showNetes;
+            Setting.ShowReactions = _showReactions;
+            Setting.ShowChats = _showChats;
+            Setting.DefaultPicture = _defaultPicture;
             Setting.Ghost = _ghostName;
             Setting.SoleGhostsOnly = _soleGhostsOnly;
-            Setting.Npub = _npub;
-            Setting.DefaultPicture = _defaultPicture;
 
             Setting.Save(_configPath);
 
