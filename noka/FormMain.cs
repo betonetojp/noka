@@ -394,6 +394,12 @@ namespace noka
                                 continue;
                             }
 
+                            // ミュートワードが含まれている時は表示しない
+                            if (Notifier.ContainsMuteWord(content))
+                            {
+                                continue;
+                            }
+
                             // プロフィール購読
                             await NostrAccess.SubscribeProfilesAsync([nostrEvent.PublicKey]);
 
@@ -490,7 +496,7 @@ namespace noka
 
                             // キーワード通知
                             var settings = Notifier.Settings;
-                            if (Notifier.CheckPost(content) && settings.Open)
+                            if (Notifier.ContainsKeyword(content) && settings.Open)
                             {
                                 NIP19.NostrEventNote nostrEventNote = new()
                                 {

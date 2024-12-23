@@ -32,10 +32,11 @@ namespace noka
                 dataGridViewUsers.Sort(dataGridViewUsers.Columns["last_activity"], ListSortDirection.Descending);
                 dataGridViewUsers.ClearSelection();
                 var settings = MainForm.Notifier.Settings;
+                checkBoxMuteMostr.Checked = settings.MuteMostr;
+                textBoxMuteWords.Text = string.Join("\r\n", settings.MuteWords);
+                textBoxKeywords.Text = string.Join("\r\n", settings.Keywords);
                 checkBoxOpenFile.Checked = settings.Open;
                 textBoxFileName.Text = settings.FileName;
-                textBoxKeywords.Text = string.Join("\r\n", settings.Keywords);
-                checkBoxMuteMostr.Checked = settings.MuteMostr;
             }
         }
 
@@ -65,10 +66,11 @@ namespace noka
                 }
                 MainForm.Users = users;
                 var settings = MainForm.Notifier.Settings;
+                settings.MuteMostr = checkBoxMuteMostr.Checked;
+                settings.MuteWords = [.. textBoxMuteWords.Text.Split(["\r\n"], StringSplitOptions.RemoveEmptyEntries)];
+                settings.Keywords = [.. textBoxKeywords.Text.Split(["\r\n"], StringSplitOptions.RemoveEmptyEntries)];
                 settings.Open = checkBoxOpenFile.Checked;
                 settings.FileName = textBoxFileName.Text;
-                settings.Keywords = [.. textBoxKeywords.Text.Split(["\r\n"], StringSplitOptions.RemoveEmptyEntries)];
-                settings.MuteMostr = checkBoxMuteMostr.Checked;
             }
             Close();
         }

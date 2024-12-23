@@ -30,15 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormManiacs));
             dataGridViewUsers = new DataGridView();
-            buttonSave = new Button();
-            checkBoxOpenFile = new CheckBox();
-            labelFileName = new Label();
-            textBoxFileName = new TextBox();
-            textBoxKeywords = new TextBox();
-            labelKeywords = new Label();
-            buttonDelete = new Button();
-            buttonReload = new Button();
-            checkBoxMuteMostr = new CheckBox();
             mute = new DataGridViewCheckBoxColumn();
             last_activity = new DataGridViewTextBoxColumn();
             petname = new DataGridViewTextBoxColumn();
@@ -48,6 +39,16 @@
             nip05 = new DataGridViewTextBoxColumn();
             picture = new DataGridViewTextBoxColumn();
             created_at = new DataGridViewTextBoxColumn();
+            buttonSave = new Button();
+            checkBoxOpenFile = new CheckBox();
+            textBoxFileName = new TextBox();
+            textBoxKeywords = new TextBox();
+            labelKeywords = new Label();
+            buttonDelete = new Button();
+            buttonReload = new Button();
+            checkBoxMuteMostr = new CheckBox();
+            textBoxMuteWords = new TextBox();
+            labelMuteWords = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridViewUsers).BeginInit();
             SuspendLayout();
             // 
@@ -64,105 +65,9 @@
             dataGridViewUsers.RowHeadersVisible = false;
             dataGridViewUsers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewUsers.ShowCellToolTips = false;
-            dataGridViewUsers.Size = new Size(440, 291);
+            dataGridViewUsers.Size = new Size(440, 215);
             dataGridViewUsers.StandardTab = true;
             dataGridViewUsers.TabIndex = 1;
-            // 
-            // buttonSave
-            // 
-            buttonSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonSave.Location = new Point(377, 406);
-            buttonSave.Name = "buttonSave";
-            buttonSave.Size = new Size(75, 23);
-            buttonSave.TabIndex = 9;
-            buttonSave.Text = "Save";
-            buttonSave.UseVisualStyleBackColor = true;
-            buttonSave.Click += ButtonSave_Click;
-            // 
-            // checkBoxOpenFile
-            // 
-            checkBoxOpenFile.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            checkBoxOpenFile.AutoSize = true;
-            checkBoxOpenFile.Location = new Point(170, 381);
-            checkBoxOpenFile.Name = "checkBoxOpenFile";
-            checkBoxOpenFile.Size = new Size(142, 19);
-            checkBoxOpenFile.TabIndex = 7;
-            checkBoxOpenFile.Text = "Open URL notification";
-            checkBoxOpenFile.UseVisualStyleBackColor = true;
-            // 
-            // labelFileName
-            // 
-            labelFileName.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            labelFileName.AutoSize = true;
-            labelFileName.Location = new Point(170, 410);
-            labelFileName.Name = "labelFileName";
-            labelFileName.Size = new Size(28, 15);
-            labelFileName.TabIndex = 0;
-            labelFileName.Text = "URL";
-            // 
-            // textBoxFileName
-            // 
-            textBoxFileName.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            textBoxFileName.BorderStyle = BorderStyle.FixedSingle;
-            textBoxFileName.Location = new Point(204, 406);
-            textBoxFileName.Name = "textBoxFileName";
-            textBoxFileName.Size = new Size(155, 23);
-            textBoxFileName.TabIndex = 8;
-            textBoxFileName.Text = "https://lumilumi.vercel.app/";
-            // 
-            // textBoxKeywords
-            // 
-            textBoxKeywords.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            textBoxKeywords.BorderStyle = BorderStyle.FixedSingle;
-            textBoxKeywords.Location = new Point(12, 356);
-            textBoxKeywords.Multiline = true;
-            textBoxKeywords.Name = "textBoxKeywords";
-            textBoxKeywords.ScrollBars = ScrollBars.Vertical;
-            textBoxKeywords.Size = new Size(152, 73);
-            textBoxKeywords.TabIndex = 5;
-            // 
-            // labelKeywords
-            // 
-            labelKeywords.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            labelKeywords.AutoSize = true;
-            labelKeywords.Location = new Point(12, 338);
-            labelKeywords.Name = "labelKeywords";
-            labelKeywords.Size = new Size(108, 15);
-            labelKeywords.TabIndex = 0;
-            labelKeywords.Text = "Keywords (per line)";
-            // 
-            // buttonDelete
-            // 
-            buttonDelete.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            buttonDelete.Location = new Point(12, 309);
-            buttonDelete.Name = "buttonDelete";
-            buttonDelete.Size = new Size(75, 23);
-            buttonDelete.TabIndex = 2;
-            buttonDelete.Text = "Delete";
-            buttonDelete.UseVisualStyleBackColor = true;
-            buttonDelete.Click += ButtonDelete_Click;
-            // 
-            // buttonReload
-            // 
-            buttonReload.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonReload.Location = new Point(377, 309);
-            buttonReload.Name = "buttonReload";
-            buttonReload.Size = new Size(75, 23);
-            buttonReload.TabIndex = 4;
-            buttonReload.Text = "Reload";
-            buttonReload.UseVisualStyleBackColor = true;
-            buttonReload.Click += ButtonReload_Click;
-            // 
-            // checkBoxMuteMostr
-            // 
-            checkBoxMuteMostr.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            checkBoxMuteMostr.AutoSize = true;
-            checkBoxMuteMostr.Location = new Point(170, 313);
-            checkBoxMuteMostr.Name = "checkBoxMuteMostr";
-            checkBoxMuteMostr.Size = new Size(147, 19);
-            checkBoxMuteMostr.TabIndex = 3;
-            checkBoxMuteMostr.Text = "Mute posts from Mostr";
-            checkBoxMuteMostr.UseVisualStyleBackColor = true;
             // 
             // mute
             // 
@@ -236,18 +141,126 @@
             created_at.ReadOnly = true;
             created_at.Width = 86;
             // 
+            // buttonSave
+            // 
+            buttonSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            buttonSave.Location = new Point(377, 406);
+            buttonSave.Name = "buttonSave";
+            buttonSave.Size = new Size(75, 23);
+            buttonSave.TabIndex = 9;
+            buttonSave.Text = "Save";
+            buttonSave.UseVisualStyleBackColor = true;
+            buttonSave.Click += ButtonSave_Click;
+            // 
+            // checkBoxOpenFile
+            // 
+            checkBoxOpenFile.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            checkBoxOpenFile.AutoSize = true;
+            checkBoxOpenFile.Location = new Point(252, 381);
+            checkBoxOpenFile.Name = "checkBoxOpenFile";
+            checkBoxOpenFile.Size = new Size(79, 19);
+            checkBoxOpenFile.TabIndex = 7;
+            checkBoxOpenFile.Text = "Open URL";
+            checkBoxOpenFile.UseVisualStyleBackColor = true;
+            // 
+            // textBoxFileName
+            // 
+            textBoxFileName.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            textBoxFileName.BorderStyle = BorderStyle.FixedSingle;
+            textBoxFileName.Location = new Point(337, 377);
+            textBoxFileName.Name = "textBoxFileName";
+            textBoxFileName.Size = new Size(115, 23);
+            textBoxFileName.TabIndex = 8;
+            textBoxFileName.Text = "https://lumilumi.vercel.app/";
+            // 
+            // textBoxKeywords
+            // 
+            textBoxKeywords.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            textBoxKeywords.BorderStyle = BorderStyle.FixedSingle;
+            textBoxKeywords.Location = new Point(252, 302);
+            textBoxKeywords.Multiline = true;
+            textBoxKeywords.Name = "textBoxKeywords";
+            textBoxKeywords.ScrollBars = ScrollBars.Vertical;
+            textBoxKeywords.Size = new Size(200, 73);
+            textBoxKeywords.TabIndex = 6;
+            // 
+            // labelKeywords
+            // 
+            labelKeywords.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            labelKeywords.AutoSize = true;
+            labelKeywords.Location = new Point(252, 284);
+            labelKeywords.Name = "labelKeywords";
+            labelKeywords.Size = new Size(156, 15);
+            labelKeywords.TabIndex = 0;
+            labelKeywords.Text = "Keywords to notify (per line)";
+            // 
+            // buttonDelete
+            // 
+            buttonDelete.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            buttonDelete.Location = new Point(12, 233);
+            buttonDelete.Name = "buttonDelete";
+            buttonDelete.Size = new Size(75, 23);
+            buttonDelete.TabIndex = 2;
+            buttonDelete.Text = "Delete";
+            buttonDelete.UseVisualStyleBackColor = true;
+            buttonDelete.Click += ButtonDelete_Click;
+            // 
+            // buttonReload
+            // 
+            buttonReload.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            buttonReload.Location = new Point(377, 233);
+            buttonReload.Name = "buttonReload";
+            buttonReload.Size = new Size(75, 23);
+            buttonReload.TabIndex = 3;
+            buttonReload.Text = "Reload";
+            buttonReload.UseVisualStyleBackColor = true;
+            buttonReload.Click += ButtonReload_Click;
+            // 
+            // checkBoxMuteMostr
+            // 
+            checkBoxMuteMostr.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            checkBoxMuteMostr.AutoSize = true;
+            checkBoxMuteMostr.Location = new Point(12, 262);
+            checkBoxMuteMostr.Name = "checkBoxMuteMostr";
+            checkBoxMuteMostr.Size = new Size(147, 19);
+            checkBoxMuteMostr.TabIndex = 4;
+            checkBoxMuteMostr.Text = "Mute posts from Mostr";
+            checkBoxMuteMostr.UseVisualStyleBackColor = true;
+            // 
+            // textBoxMuteWords
+            // 
+            textBoxMuteWords.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            textBoxMuteWords.BorderStyle = BorderStyle.FixedSingle;
+            textBoxMuteWords.Location = new Point(12, 302);
+            textBoxMuteWords.Multiline = true;
+            textBoxMuteWords.Name = "textBoxMuteWords";
+            textBoxMuteWords.ScrollBars = ScrollBars.Vertical;
+            textBoxMuteWords.Size = new Size(200, 127);
+            textBoxMuteWords.TabIndex = 5;
+            // 
+            // labelMuteWords
+            // 
+            labelMuteWords.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            labelMuteWords.AutoSize = true;
+            labelMuteWords.Location = new Point(12, 284);
+            labelMuteWords.Name = "labelMuteWords";
+            labelMuteWords.Size = new Size(120, 15);
+            labelMuteWords.TabIndex = 0;
+            labelMuteWords.Text = "Mute words (per line)";
+            // 
             // FormManiacs
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(464, 441);
+            Controls.Add(textBoxMuteWords);
             Controls.Add(checkBoxMuteMostr);
             Controls.Add(buttonReload);
             Controls.Add(buttonDelete);
+            Controls.Add(labelMuteWords);
             Controls.Add(labelKeywords);
             Controls.Add(textBoxKeywords);
             Controls.Add(textBoxFileName);
-            Controls.Add(labelFileName);
             Controls.Add(checkBoxOpenFile);
             Controls.Add(buttonSave);
             Controls.Add(dataGridViewUsers);
@@ -271,7 +284,6 @@
         private DataGridView dataGridViewUsers;
         private Button buttonSave;
         private CheckBox checkBoxOpenFile;
-        private Label labelFileName;
         private TextBox textBoxFileName;
         private TextBox textBoxKeywords;
         private Label labelKeywords;
@@ -287,5 +299,7 @@
         private DataGridViewTextBoxColumn nip05;
         private DataGridViewTextBoxColumn picture;
         private DataGridViewTextBoxColumn created_at;
+        private TextBox textBoxMuteWords;
+        private Label labelMuteWords;
     }
 }

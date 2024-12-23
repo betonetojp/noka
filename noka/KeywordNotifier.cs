@@ -8,24 +8,27 @@ namespace noka
 {
     public class NotifierSettings
     {
+        [JsonPropertyName("mute_mostr")]
+        public bool MuteMostr { get; set; }
+        [JsonPropertyName("mute_words")]
+        public List<string> MuteWords { get; set; } = [];
         [JsonPropertyName("keywords")]
         public List<string> Keywords { get; set; } = [];
         [JsonPropertyName("open_file")]
         public bool Open { get; set; }
         [JsonPropertyName("file_name")]
         public string FileName { get; set; } = string.Empty;
-        [JsonPropertyName("mute_mostr")]
-        public bool MuteMostr { get; set; }
     }
 
     public class KeywordNotifier
     {
         public NotifierSettings Settings { get; set; } = new();
 
+        private bool _muteMostr = false;
+        private List<string> _muteWords = [];
         private List<string> _keywords = [];
         private bool _shouldOpenFile = false;
         private string _fileName = "https://lumilumi.vercel.app/";
-        private bool _muteMostr = false;
 
         //private readonly string _keywordsJsonPath = Path.Combine(Tools.GetAppPath(), "keywords.json");
         private readonly string _keywordsJsonPath = Path.Combine(Application.StartupPath, "keywords.json");
@@ -41,10 +44,11 @@ namespace noka
 
             Settings = new NotifierSettings()
             {
+                MuteMostr = _muteMostr,
+                MuteWords = _muteWords,
                 Keywords = _keywords,
                 Open = _shouldOpenFile,
                 FileName = _fileName,
-                MuteMostr = _muteMostr
             };
 
             SaveSettings();
@@ -73,10 +77,11 @@ namespace noka
                     var settings = JsonSerializer.Deserialize<NotifierSettings>(jsonContent, _options);
                     if (settings != null)
                     {
+                        _muteMostr = settings.MuteMostr;
+                        _muteWords = settings.MuteWords;
                         _keywords = settings.Keywords;
                         _shouldOpenFile = settings.Open;
                         _fileName = settings.FileName;
-                        _muteMostr = settings.MuteMostr;
                     }
                 }
                 catch (Exception ex)
@@ -86,11 +91,23 @@ namespace noka
             }
         }
 
-        public bool CheckPost(string post)
+        public bool ContainsKeyword(string post)
         {
             foreach (var keyword in _keywords)
             {
                 if (post.Contains(keyword))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool ContainsMuteWord(string post)
+        {
+            foreach (var muteWord in _muteWords)
+            {
+                if (post.Contains(muteWord))
                 {
                     return true;
                 }
