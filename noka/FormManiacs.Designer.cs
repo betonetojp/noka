@@ -189,9 +189,9 @@
             labelKeywords.AutoSize = true;
             labelKeywords.Location = new Point(252, 284);
             labelKeywords.Name = "labelKeywords";
-            labelKeywords.Size = new Size(156, 15);
+            labelKeywords.Size = new Size(155, 15);
             labelKeywords.TabIndex = 0;
-            labelKeywords.Text = "Keywords to notify (per line)";
+            labelKeywords.Text = "keywords to notify (per line)";
             // 
             // buttonDelete
             // 
@@ -242,9 +242,9 @@
             labelMuteWords.AutoSize = true;
             labelMuteWords.Location = new Point(12, 284);
             labelMuteWords.Name = "labelMuteWords";
-            labelMuteWords.Size = new Size(120, 15);
+            labelMuteWords.Size = new Size(119, 15);
             labelMuteWords.TabIndex = 0;
-            labelMuteWords.Text = "Mute words (per line)";
+            labelMuteWords.Text = "mute words (per line)";
             // 
             // FormManiacs
             // 

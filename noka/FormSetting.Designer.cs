@@ -180,7 +180,7 @@
             labelVersion.Name = "labelVersion";
             labelVersion.Size = new Size(37, 15);
             labelVersion.TabIndex = 0;
-            labelVersion.Text = "v0.5.2";
+            labelVersion.Text = "v0.6.0";
             // 
             // labelOpacity
             // 
@@ -326,9 +326,9 @@
             label9.AutoSize = true;
             label9.Location = new Point(6, 169);
             label9.Name = "label9";
-            label9.Size = new Size(36, 15);
+            label9.Size = new Size(35, 15);
             label9.TabIndex = 15;
-            label9.Text = "Kinds";
+            label9.Text = "kinds";
             // 
             // checkBoxMinimizeToTray
             // 
