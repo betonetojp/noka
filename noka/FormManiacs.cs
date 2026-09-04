@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 
 namespace noka
 {
@@ -15,7 +15,12 @@ namespace noka
             if (MainForm != null)
             {
                 dataGridViewUsers.Rows.Clear();
-                foreach (var user in MainForm.Users)
+                KeyValuePair<string, User?>[] usersSnapshot;
+                lock (MainForm.Users)
+                {
+                    usersSnapshot = MainForm.Users.ToArray();
+                }
+                foreach (var user in usersSnapshot)
                 {
                     dataGridViewUsers.Rows.Add(
                         user.Value?.Mute,

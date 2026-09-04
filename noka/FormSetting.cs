@@ -1,4 +1,4 @@
-﻿using SSTPLib;
+using SSTPLib;
 using System.Diagnostics;
 
 namespace noka
@@ -12,7 +12,8 @@ namespace noka
             InitializeComponent();
 
             // ボタンの画像をDPIに合わせて表示
-            float scale = CreateGraphics().DpiX / 96f;
+            using var graphics = CreateGraphics();
+            float scale = graphics.DpiX / 96f;
             int size = (int)(16 * scale);
             if (scale < 2.0f)
             {
