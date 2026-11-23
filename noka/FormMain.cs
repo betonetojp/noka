@@ -283,8 +283,7 @@ namespace noka
                             // ログイン済みで自分へのリアクション
                             if (!string.IsNullOrEmpty(_npubHex) && nostrEvent.GetTaggedPublicKeys().Contains(_npubHex))
                             {
-                                // プロフィール購読とインデクサ取得
-                                await NostrAccess.SubscribeProfilesAsync([nostrEvent.PublicKey]);
+                                // プロフィール取得（通常リレー＋インデクサリレー）
                                 FetchProfileIfNeeded(nostrEvent.PublicKey);
 
                                 // ユーザー取得
@@ -404,8 +403,7 @@ namespace noka
                                 continue;
                             }
 
-                            // プロフィール購読とインデクサ取得
-                            await NostrAccess.SubscribeProfilesAsync([nostrEvent.PublicKey]);
+                            // プロフィール取得（通常リレー＋インデクサリレー）
                             FetchProfileIfNeeded(nostrEvent.PublicKey);
 
                             // ユーザー取得
@@ -1094,7 +1092,7 @@ namespace noka
                 bool fetched = false;
                 try
                 {
-                    var profileEvent = await NostrAccess.FetchProfileFromIndexerAsync(pubkey);
+                    var profileEvent = await NostrAccess.FetchLatestProfileAsync(pubkey);
                     if (profileEvent?.Content != null)
                     {
                         fetched = true;
@@ -1118,7 +1116,7 @@ namespace noka
                                     newUserData.LastActivity = DateTime.Now;
                                     Users[pubkey] = newUserData;
                                     var shortKey = pubkey.Length >= 8 ? pubkey[..8] : pubkey;
-                                    Debug.WriteLine($"[Indexer] プロフィール取得成功: {newUserData.DisplayName} @{newUserData.Name} ({shortKey})");
+                                    Debug.WriteLine($"[Profile] プロフィール更新: {newUserData.DisplayName} @{newUserData.Name} ({shortKey})");
                                 }
                             }
                         }
