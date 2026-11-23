@@ -79,6 +79,7 @@ namespace noka
                 _relays = Tools.GetEnabledRelays();
                 if (0 == _relays.Length)
                 {
+                    _relayStatusList.Clear();
                     return 0;
                 }
 
@@ -129,6 +130,7 @@ namespace noka
 
             // 接続状態を確認し、失敗したリレーを記録
             _relayStatusList.Clear();
+            int openCount = 0;
             foreach (var relay in _relays)
             {
                 if (_clients.States.TryGetValue(relay, out var state))
@@ -140,12 +142,14 @@ namespace noka
                     }
                     else
                     {
+                        Debug.WriteLine($"リレー {relay} に接続しました。状態: {state}");
                         _relayStatusList.Add(relay.ToString());
+                        openCount++;
                     }
                 }
             }
 
-            return _clients.States.Count;
+            return openCount;
         }
         #endregion
 

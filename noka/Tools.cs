@@ -179,11 +179,9 @@ namespace noka
         {
             List<Relay> defaultRelays = [
                 new Relay { Enabled = true, Url = "wss://yabu.me/" },
-                new Relay { Enabled = true, Url = "wss://r.kojira.io/" },
                 new Relay { Enabled = true, Url = "wss://relay-jp.nostr.wirednet.jp/" },
                 new Relay { Enabled = false, Url = "wss://nos.lol/" },
                 new Relay { Enabled = false, Url = "wss://relay.damus.io/" },
-                new Relay { Enabled = false, Url = "wss://relay.nostr.band/" },
                 ];
 
             // relays.jsonを読み込み
@@ -352,6 +350,26 @@ namespace noka
                 Debug.WriteLine(ex.Message);
                 return string.Empty;
             }
+        }
+        /// <summary>
+        /// サロゲートペア（絵文字等）を途中で切断せずに文字列を切り詰める
+        /// </summary>
+        public static string TruncateSafe(string text, int maxLength, string suffix = "...")
+        {
+            if (string.IsNullOrEmpty(text) || maxLength <= 0 || text.Length <= maxLength)
+            {
+                return text;
+            }
+            int cutIndex = maxLength;
+            if (char.IsHighSurrogate(text[cutIndex - 1]))
+            {
+                cutIndex--;
+                if (cutIndex == 0 && text.Length >= 2)
+                {
+                    cutIndex = 2;
+                }
+            }
+            return text[..cutIndex] + suffix;
         }
         #endregion
     }

@@ -32,6 +32,12 @@ namespace noka
         /// </summary>
         private readonly HashSet<string> _fetchingProfileHexs = [];
         /// <summary>
+        /// プロフィール最終取得時刻キャッシュ
+        /// </summary>
+        private readonly Dictionary<string, DateTime> _profileLastFetchedAt = [];
+        private static readonly TimeSpan ProfileRefreshInterval = TimeSpan.FromMinutes(30);
+        private static readonly TimeSpan ProfileRetryCooldown = TimeSpan.FromMinutes(1);
+        /// <summary>
         /// ユーザー辞書
         /// </summary>
         internal Dictionary<string, User?> Users = [];
@@ -92,12 +98,12 @@ namespace noka
             }
 
             // ボタンの画像をDPIに合わせて表示
-            float scale = CreateGraphics().DpiX / 96f;
+            using var graphics = CreateGraphics();
+            float scale = graphics.DpiX / 96f;
             int size = (int)(16 * scale);
             if (scale < 2.0f)
             {
                 buttonRelayList.Image = new Bitmap(Properties.Resources.icons8_list_16, size, size);
-                buttonStop.Image = new Bitmap(Properties.Resources.icons8_stop_16, size, size);
                 buttonStart.Image = new Bitmap(Properties.Resources.icons8_start_16, size, size);
                 buttonStop.Image = new Bitmap(Properties.Resources.icons8_stop_16, size, size);
                 buttonSetting.Image = new Bitmap(Properties.Resources.icons8_setting_16, size, size);
@@ -282,7 +288,11 @@ namespace noka
                                 FetchProfileIfNeeded(nostrEvent.PublicKey);
 
                                 // ユーザー取得
-                                Users.TryGetValue(nostrEvent.PublicKey, out User? user);
+                                User? user;
+                                lock (Users)
+                                {
+                                    Users.TryGetValue(nostrEvent.PublicKey, out user);
+                                }
 
                                 // ユーザー表示名取得
                                 string userName = GetUserName(nostrEvent.PublicKey);
@@ -291,10 +301,7 @@ namespace noka
                                     userName = nostrEvent.PublicKey[..8];
                                 }
                                 // ユーザー表示名カット
-                                if (userName.Length > _cutNameLength)
-                                {
-                                    userName = $"{userName[.._cutNameLength]}...";
-                                }
+                                userName = Tools.TruncateSafe(userName, _cutNameLength);
 
                                 // SSPに送る
                                 if (null != _ds)
@@ -321,7 +328,7 @@ namespace noka
                                         { "Reference7", nostrEvent.PublicKey.ConvertToNpub() }, // npub1...
                                         { "Script", $"{speaker}リアクション {userName}\\n{content}\\e" }
                                     };
-                                    string sstpmsg = _SSTPMethod + "\r\n" + string.Join("\r\n", SSTPHeader.Select(kvp => kvp.Key + ": " + kvp.Value.Replace("\n", "\\n"))) + "\r\n\r\n";
+                                    string sstpmsg = _SSTPMethod + "\r\n" + string.Join("\r\n", SSTPHeader.Select(kvp => kvp.Key + ": " + SanitizeSstpValue(kvp.Value))) + "\r\n\r\n";
                                     string r = _ds.GetSSTPResponse(_ghostName, sstpmsg);
                                     //Debug.WriteLine(r);
                                 }
@@ -402,7 +409,11 @@ namespace noka
                             FetchProfileIfNeeded(nostrEvent.PublicKey);
 
                             // ユーザー取得
-                            Users.TryGetValue(nostrEvent.PublicKey, out User? user);
+                            User? user;
+                            lock (Users)
+                            {
+                                Users.TryGetValue(nostrEvent.PublicKey, out user);
+                            }
 
                             // 個別ゴーストチェック
                             bool isSole = false;
@@ -422,10 +433,7 @@ namespace noka
                                 userName = nostrEvent.PublicKey[..8];
                             }
                             // ユーザー表示名カット
-                            if (userName.Length > _cutNameLength)
-                            {
-                                userName = $"{userName[.._cutNameLength]}...";
-                            }
+                            userName = Tools.TruncateSafe(userName, _cutNameLength);
 
                             // SSPに送る
                             if (null != _ds)
@@ -439,12 +447,8 @@ namespace noka
                                 //SearchGhost();
                                 _ds.Update();
 
-                                string msg = editedContent;
                                 // 本文カット
-                                if (msg.Length > _cutLength)
-                                {
-                                    msg = $"{msg[.._cutLength]}...";
-                                }
+                                string msg = Tools.TruncateSafe(editedContent, _cutLength);
                                 var defaultPicture = _defaultPicture.Replace("{pubkey}", nostrEvent.PublicKey)
                                                                     .Replace("{npub}", nostrEvent.PublicKey.ConvertToNpub());
                                 Dictionary<string, string> SSTPHeader = new(_baseSSTPHeader)
@@ -458,7 +462,7 @@ namespace noka
                                     { "Reference7", nostrEvent.PublicKey.ConvertToNpub() }, // npub1...
                                     { "Script", $"{speaker}{(isSole ? "" : userName)}\\n{msg}\\e" }
                                 };
-                                string sstpmsg = _SSTPMethod + "\r\n" + string.Join("\r\n", SSTPHeader.Select(kvp => kvp.Key + ": " + kvp.Value.Replace("\n", "\\n"))) + "\r\n\r\n";
+                                string sstpmsg = _SSTPMethod + "\r\n" + string.Join("\r\n", SSTPHeader.Select(kvp => kvp.Key + ": " + SanitizeSstpValue(kvp.Value))) + "\r\n\r\n";
 
                                 string r;
                                 foreach (SoleGhost soleGhost in _soleGhosts)
@@ -505,12 +509,9 @@ namespace noka
                             //// 改行をスペースに置き換え
                             //editedContent = editedContent.Replace('\n', ' ');
                             // 改行を表示用に置き換え
-                            editedContent = editedContent.Replace("\n", "\r\n ");
+                            editedContent = editedContent.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", "\r\n ");
                             // 本文カット
-                            if (editedContent.Length > _cutLength)
-                            {
-                                editedContent = $"{editedContent[.._cutLength]}...";
-                            }
+                            editedContent = Tools.TruncateSafe(editedContent, _cutLength);
                             // 画面に表示
                             textBoxTimeline.Text = (iSnokakoi ? "[n]" : string.Empty) + headMark
                                                  + $"{timeString} {userName}{Environment.NewLine}"
@@ -541,10 +542,13 @@ namespace noka
                                 // petnameをユーザー辞書に保存
                                 if (2 < tag.Data.Count)
                                 {
-                                    Users.TryGetValue(tag.Data[0], out User? user);
-                                    if (null != user)
+                                    lock (Users)
                                     {
-                                        user.PetName = tag.Data[2];
+                                        Users.TryGetValue(tag.Data[0], out User? user);
+                                        if (null != user)
+                                        {
+                                            user.PetName = tag.Data[2];
+                                        }
                                     }
                                 }
                             }
@@ -614,6 +618,7 @@ namespace noka
                     textBoxTimeline.Text = "> Disconnect." + Environment.NewLine + textBoxTimeline.Text;
                     NostrAccess.Clients.Dispose();
                     NostrAccess.Clients = null;
+                    NostrAccess.DisconnectAndDispose();
 
                     Tools.SaveUsers(Users);
 
@@ -825,11 +830,15 @@ namespace noka
         private string? GetName(string publicKeyHex)
         {
             // 情報があればユーザー名を取得
-            Users.TryGetValue(publicKeyHex, out User? user);
+            User? user;
+            lock (Users)
+            {
+                Users.TryGetValue(publicKeyHex, out user);
+            }
             string? userName = string.Empty;
             if (user != null)
             {
-                userName = user.Name;
+                userName = !string.IsNullOrEmpty(user.Name) ? user.Name : user.DisplayName;
                 // 取得日更新
                 user.LastActivity = DateTime.Now;
             }
@@ -846,7 +855,11 @@ namespace noka
         private string GetUserName(string publicKeyHex)
         {
             // 情報があれば表示名を取得
-            Users.TryGetValue(publicKeyHex, out User? user);
+            User? user;
+            lock (Users)
+            {
+                Users.TryGetValue(publicKeyHex, out user);
+            }
             string? userName = "???";
             if (user != null)
             {
@@ -854,12 +867,17 @@ namespace noka
                 // display_nameが無い場合はnameとする
                 if (string.IsNullOrEmpty(userName))
                 {
-                    userName = $"{user.Name}";
+                    userName = user.Name;
                 }
                 // petnameがある場合はpetnameとする
                 if (!string.IsNullOrEmpty(user.PetName))
                 {
-                    userName = $"{user.PetName}";
+                    userName = user.PetName;
+                }
+                // どちらも空の場合は???とする
+                if (string.IsNullOrEmpty(userName))
+                {
+                    userName = "???";
                 }
                 // 取得日更新
                 user.LastActivity = DateTime.Now;
@@ -877,9 +895,9 @@ namespace noka
         /// <returns>ミュートフラグ</returns>
         private bool IsMuted(string publicKeyHex)
         {
-            if (Users.TryGetValue(publicKeyHex, out User? user))
+            lock (Users)
             {
-                if (null != user)
+                if (Users.TryGetValue(publicKeyHex, out User? user) && null != user)
                 {
                     return user.Mute;
                 }
@@ -887,6 +905,11 @@ namespace noka
             return false;
         }
         #endregion
+
+        private static string SanitizeSstpValue(string value)
+        {
+            return value.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", "\\n");
+        }
 
         #region 閉じる
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -1041,28 +1064,40 @@ namespace noka
         {
             if (string.IsNullOrEmpty(pubkey)) return;
 
-            // 既に有効な表示名がある場合は再取得不要
-            if (Users.TryGetValue(pubkey, out var existingUser) && existingUser != null)
-            {
-                if (!string.IsNullOrEmpty(existingUser.DisplayName) || !string.IsNullOrEmpty(existingUser.Name))
-                {
-                    return;
-                }
-            }
-
+            var now = DateTime.UtcNow;
             lock (_fetchingProfileHexs)
             {
                 if (_fetchingProfileHexs.Contains(pubkey)) return;
+
+                bool hasValidName = false;
+                lock (Users)
+                {
+                    if (Users.TryGetValue(pubkey, out var existingUser) && existingUser != null)
+                    {
+                        hasValidName = !string.IsNullOrEmpty(existingUser.DisplayName) || !string.IsNullOrEmpty(existingUser.Name);
+                    }
+                }
+
+                bool isFresh = _profileLastFetchedAt.TryGetValue(pubkey, out var lastFetched)
+                    && (now - lastFetched) < ProfileRefreshInterval;
+
+                if (hasValidName && isFresh)
+                {
+                    return;
+                }
+
                 _fetchingProfileHexs.Add(pubkey);
             }
 
             _ = Task.Run(async () =>
             {
+                bool fetched = false;
                 try
                 {
                     var profileEvent = await NostrAccess.FetchProfileFromIndexerAsync(pubkey);
                     if (profileEvent?.Content != null)
                     {
+                        fetched = true;
                         var newUserData = Tools.JsonToUser(profileEvent.Content, profileEvent.CreatedAt, Notifier.Settings.MuteMostr);
                         if (newUserData != null)
                         {
@@ -1082,7 +1117,8 @@ namespace noka
                                 {
                                     newUserData.LastActivity = DateTime.Now;
                                     Users[pubkey] = newUserData;
-                                    Debug.WriteLine($"[Indexer] プロフィール取得成功: {newUserData.DisplayName} @{newUserData.Name} ({pubkey[..8]})");
+                                    var shortKey = pubkey.Length >= 8 ? pubkey[..8] : pubkey;
+                                    Debug.WriteLine($"[Indexer] プロフィール取得成功: {newUserData.DisplayName} @{newUserData.Name} ({shortKey})");
                                 }
                             }
                         }
@@ -1091,6 +1127,16 @@ namespace noka
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"FetchProfileIfNeeded エラー: {ex.Message}");
+                }
+                finally
+                {
+                    lock (_fetchingProfileHexs)
+                    {
+                        _profileLastFetchedAt[pubkey] = fetched
+                            ? DateTime.UtcNow
+                            : DateTime.UtcNow - ProfileRefreshInterval + ProfileRetryCooldown;
+                        _fetchingProfileHexs.Remove(pubkey);
+                    }
                 }
             });
         }

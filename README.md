@@ -15,7 +15,7 @@ Nostr のリレーサーバーに接続してグローバルタイムライン�
 
 - **タイムライン受信**: グローバルタイムラインおよびフォロータイムライン（npub指定時）のリアルタイム受信
 - **表示 kind の選択**: テキストノート（kind: 1）、リアクション（kind: 7）、チャンネルメッセージ（kind: 42）
-- **インデクサリレー連携**: プロフィール未取得のアカウントもインデクサリレー（`directory.yabu.me`）から非同期に自動取得
+- **インデクサリレー連携**: プロフィール未取得または一定時間（30分）経過したアカウントはインデクサリレー（`directory.yabu.me`）から最新プロフィールを非同期に自動取得し、`display_name` の変更にも追従
 - **省略表示**: URL・画像・引用・メンションをコンパクトなアイコン・タグ形式に整形表示
 - **ミュート機能**: アカウントミュートおよび指定単語を含む投稿のワードミュート
 - **キーワード通知**: 指定キーワードを含む投稿を受信した際のアクション起動
@@ -74,7 +74,8 @@ Nostr のリレーサーバーに接続してグローバルタイムライン�
 
 ---
 
-## 利用ライブラリ
-- [NNostr](https://github.com/Kukks/NNostr) (NNostr.Client を一部変更して同梱)
-- [DirectSSTPTester](https://github.com/nikolat/DirectSSTPTester) (SSTPLib を利用)
-- [Icons8](https://icons8.com) (アイコン素材)
+## 利用ライブラリ / NuGet パッケージ
+- [NBitcoin.Secp256k1](https://www.nuget.org/packages/NBitcoin.Secp256k1)
+- [NNostr](https://github.com/Kukks/NNostr)（必要なクライアント機能のみ抜粋・カスタマイズして `noka/Nostr` に統合）
+- [DirectSSTPTester](https://github.com/nikolat/DirectSSTPTester)（SSTPLib を利用）
+- [Icons8](https://icons8.com)（アイコン素材）
